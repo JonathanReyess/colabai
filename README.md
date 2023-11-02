@@ -32,7 +32,8 @@ Content Based Filtering - usage of item features to recommend other items simila
 5. We then use the sigmoid kernel function from sklearn.metrics.pairwise to calculate the pairwise similarity between each module description      and storing it in a matrix. We then transform the similarity scores into values between 0 and 1. 
 
 The sigmoid_kernel function takes the TF-IDF matrix as input and applies a sigmoid transformation to it with the following formula:
-S(x, y) = 1 / (1 + e^(-x * y))
+
+***S(x, y) = 1 / (1 + e^(-x * y))***
 
 Where S(x, y) represents the similarity between two modules (x and y) and e is the base of the natural logarithm (approximately 2.71828).
 
