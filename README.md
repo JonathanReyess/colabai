@@ -27,7 +27,7 @@ Content Based Filtering - usage of item features to recommend other items simila
       )
    ```
 
-   We will then produce a 174 x 1017 TF-IDF Matrix with numerical values for each word in each module's description, where the rows correspond to     modules and columns to unique words.
+   We will then produce a ***174x1017*** TF-IDF Matrix with numerical values for each word in each module's description, where the rows correspond to     modules and columns to unique words.
 
 5. We then use the sigmoid kernel function from sklearn.metrics.pairwise to calculate the pairwise similarity between each module description      and storing it in a matrix.    We then transform the similarity scores into values between 0 and 1. 
 
