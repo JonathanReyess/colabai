@@ -24,8 +24,7 @@ We can modify the following parameters when creating our TF-IDF matrix to contro
        token_pattern=r'\w{1,}',  # Consider words with at least 1 character
        ngram_range=(1, 3),      # Consider unigrams, bigrams, and trigrams
        stop_words='english'     # Remove common English stop words
-   )
-  ```markdown
+   )```markdown
 
 
 We will then produce a 174 x 1017 TF-IDF Matrix with numerical values for each word in each module's description, where the rows correspond to modules and columns to unique words.
