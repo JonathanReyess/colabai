@@ -5,7 +5,7 @@ Recommendation system being applied:
 Content Based Filtering - usage of item features to recommend other items similar to what a user likes, based on their previous actions or explicit feedback (per Google for Developers - Machine Learning)
 
 1. Look at a student’s module history and take into account which modules they’ve actually attended.
-2. From our .csv with all module names and descriptions, passes each module name through the recommendation engine and returns 5 recommended modules. How does it do this? 
+2. From our .csv with all module names and descriptions, passes each module name through the recommendation engine and returns 10 recommended modules. How does it do this? 
 3. Read our .csv data files with Pandas and store it in our data frames.
 4. Clean our data frames by removing unnecessary data columns.
 5. Perform text vectorization for the description of each module using the Term Frequency-Inverse Document Frequency (TF-IDF), which converts our descriptions into a numerical matrix from sklearn.feature_extraction.text.
