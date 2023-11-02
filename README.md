@@ -2,7 +2,10 @@
 This project aims to explore the various ways in which the emerging field of artificial intelligence can be leveraged and applied to Duke University's Innovation Co-Lab. 
 ## 1 - Pathways Course Recommender 
 **Recommendation system being applied:** 
+
 Content Based Filtering - usage of item features to recommend other items similar to what a user likes, based on their previous actions or explicit feedback (per Google for Developers - Machine Learning)
+
+### Steps
 
 1. Store our two datasets in .csv format, one with a list of all modules and their descriptions, another with a student’s module history.
 2. Read our .csv data files with Pandas and store it in our data frames.
@@ -11,7 +14,8 @@ Content Based Filtering - usage of item features to recommend other items simila
 4. Perform text vectorization for the description of each module using the Term Frequency-Inverse Document Frequency (TF-IDF), which converts our descriptions into a numerical matrix from sklearn.feature_extraction.text.
 
 We can modify the following parameters when creating our TF-IDF matrix to control how TF-IDF values are calculated:
- 
+
+   ```markdown
   tfv = TfidfVectorizer(
     min_df=3,           # Ignore terms that appear in fewer than 3 descriptions
     max_features=None,  # Keep all unique terms
