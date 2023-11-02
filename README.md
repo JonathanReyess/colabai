@@ -35,7 +35,7 @@ Content Based Filtering - usage of item features to recommend other items simila
 
    ***S(x, y) = 1 / (1 + e^(-x * y))***
 
-   Where S(x, y) represents the similarity between two modules (x and y) and e is the base of the natural logarithm (approximately 2.71828).
+   Where S(x, y) represents the similarity between two modules (x and y) and e is the base of the natural logarithm.
 
    We then output a similarity matrix where each entry (i, j) represents the similarity score between module descriptions i and j.
 
