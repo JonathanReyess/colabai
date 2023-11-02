@@ -15,7 +15,7 @@ Content Based Filtering - usage of item features to recommend other items simila
 
 We can modify the following parameters when creating our TF-IDF matrix to control how TF-IDF values are calculated:
 
-   ```markdown
+   
    tfv = TfidfVectorizer(
        min_df=3,           # Ignore terms that appear in fewer than 3 descriptions
        max_features=None,  # Keep all unique terms
@@ -24,7 +24,7 @@ We can modify the following parameters when creating our TF-IDF matrix to contro
        token_pattern=r'\w{1,}',  # Consider words with at least 1 character
        ngram_range=(1, 3),      # Consider unigrams, bigrams, and trigrams
        stop_words='english'     # Remove common English stop words
-   )```markdown
+   )
 
 
 We will then produce a 174 x 1017 TF-IDF Matrix with numerical values for each word in each module's description, where the rows correspond to modules and columns to unique words.
