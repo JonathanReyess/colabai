@@ -14,8 +14,7 @@ Content Based Filtering - usage of item features to recommend other items simila
 4. Perform text vectorization for the description of each module using the Term Frequency-Inverse Document Frequency (TF-IDF), which converts our descriptions into a numerical matrix from sklearn.feature_extraction.text.
 
 We can modify the following parameters when creating our TF-IDF matrix to control how TF-IDF values are calculated:
-
-   
+```
    tfv = TfidfVectorizer(
        min_df=3,           # Ignore terms that appear in fewer than 3 descriptions
        max_features=None,  # Keep all unique terms
@@ -25,6 +24,7 @@ We can modify the following parameters when creating our TF-IDF matrix to contro
        ngram_range=(1, 3),      # Consider unigrams, bigrams, and trigrams
        stop_words='english'     # Remove common English stop words
    )
+```
 
 
 We will then produce a 174 x 1017 TF-IDF Matrix with numerical values for each word in each module's description, where the rows correspond to modules and columns to unique words.
