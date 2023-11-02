@@ -14,6 +14,7 @@ Content Based Filtering - usage of item features to recommend other items simila
 4. Perform text vectorization for the description of each module using the Term Frequency-Inverse Document Frequency (TF-IDF), which converts our descriptions into a numerical matrix from sklearn.feature_extraction.text.
 
 We can modify the following parameters when creating our TF-IDF matrix to control how TF-IDF values are calculated:
+
 ```
    tfv = TfidfVectorizer(
        min_df=3,           # Ignore terms that appear in fewer than 3 descriptions
@@ -25,8 +26,12 @@ We can modify the following parameters when creating our TF-IDF matrix to contro
        stop_words='english'     # Remove common English stop words
    )
 ```
-
-
+Some basic Git commands are:
+```
+git status
+git add
+git commit
+```
 We will then produce a 174 x 1017 TF-IDF Matrix with numerical values for each word in each module's description, where the rows correspond to modules and columns to unique words.
 
 5. We then use the sigmoid kernel function from sklearn.metrics.pairwise to calculate the pairwise similarity between each module description and storing it in a matrix. We then transform the similarity scores into values between 0 and 1. 
