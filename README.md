@@ -1,7 +1,7 @@
 # Duke Innovation Co-Lab AI Project 
 This project aims to explore the various ways in which the emerging field of artificial intelligence can be leveraged and applied to Duke University's Innovation Co-Lab. 
 # 1 - Pathways Course Recommender 
-Recommendation System being applied: Content Based Filtering - uses item features to recommend other items similar to what the user likes, based on their previous actions or explicit feedback (per Google for Developers - Machine Learning)
+Recommendation system being applied: Content Based Filtering - uses item features to recommend other items similar to what the user likes, based on their previous actions or explicit feedback (per Google for Developers - Machine Learning)
 
 1. Look at a student’s module history and take into account which modules they’ve actually attended.
 2. From our .csv with all module names and descriptions, passes each module name through the recommendation engine and returns 5 recommended modules. How does it do this? 
