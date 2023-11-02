@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import sigmoid_kernel
+import operator
 
 modules = pd.read_csv("data/all_modules.csv")
 student = pd.read_csv("data/student_modules.csv")
@@ -32,7 +33,7 @@ def rec(title, sig=sig):
     index = indices[title]
     sig_scores = list(enumerate(sig[index]))
     sig_scores = sorted(sig_scores, key=lambda x:x[1], reverse =True )
-    sig_scores = sig_scores[1:4]
+    sig_scores = sig_scores[1:11]
     module_indices = [i[0] for i in sig_scores]
     recommendation = modules_clean_df['Title'].iloc[module_indices]
     final = []
@@ -59,7 +60,32 @@ for module in module_list:
     for item in recs:
         if item not in module_list:
             recs_list.append(item)
-print(recs_list)
+
+
+recset = set(recs_list)
+reclist = []
+for item in recset:
+    reclist.append(item)
+
+final_recs = []
+frequency = []
+for recs in recset:
+    count = 0
+    for mod in recs_list: 
+        if mod == recs:
+            count +=1
+    frequency.append(count)
+
+freq_dict = {reclist[i]: frequency[i] for i in range(len(reclist))}
+
+sorted_dict = dict(sorted(freq_dict.items(), key=operator.itemgetter(1), reverse=True))
+modules = list(sorted_dict.keys())
+courses = [course for course in modules[:5]]
+recommendations = "Your recommendations are: \n" + "\n".join(courses)
+print(recommendations)
+
+
+##sort list by frequency of title and then return the top 3
 
 
 #print(module_list)
