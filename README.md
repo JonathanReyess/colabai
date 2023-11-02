@@ -29,17 +29,17 @@ Content Based Filtering - usage of item features to recommend other items simila
 
    We will then produce a 174 x 1017 TF-IDF Matrix with numerical values for each word in each module's description, where the rows correspond to     modules and columns to unique words.
 
-   5. We then use the sigmoid kernel function from sklearn.metrics.pairwise to calculate the pairwise similarity between each module description      and storing it in a matrix. We then transform the similarity scores into values between 0 and 1. 
-   
-   The sigmoid_kernel function takes the TF-IDF matrix as input and applies a sigmoid transformation to it with the following formula:
-   S(x, y) = 1 / (1 + e^(-x * y))
-   
-   Where S(x, y) represents the similarity between two modules (x and y) and e is the base of the natural logarithm (approximately 2.71828).
-   
-   We then output a similarity matrix where each entry (i, j) represents the similarity score between module descriptions i and j.
-   
-   6. We now map each module title with its corresponding indice of the matrix. 
-   7. Given a module title as input, we use our similarity matrix to find similar modules sorted by similarity scores, excluding the input module     itself, and return a list of 10 recommended modules. 
-   8. Every list of recommended modules for each corresponding module the student took is then stored in a list. 
-   9. We create a dictionary of every recommended module along with how many times it appeared in each recommendation.
-   10. We sort this dictionary of modules, frequency pairs by frequency, and return the first five modules with the highest frequency. 
+5. We then use the sigmoid kernel function from sklearn.metrics.pairwise to calculate the pairwise similarity between each module description      and storing it in a matrix. We then transform the similarity scores into values between 0 and 1. 
+
+The sigmoid_kernel function takes the TF-IDF matrix as input and applies a sigmoid transformation to it with the following formula:
+S(x, y) = 1 / (1 + e^(-x * y))
+
+Where S(x, y) represents the similarity between two modules (x and y) and e is the base of the natural logarithm (approximately 2.71828).
+
+We then output a similarity matrix where each entry (i, j) represents the similarity score between module descriptions i and j.
+
+6. We now map each module title with its corresponding indice of the matrix. 
+7. Given a module title as input, we use our similarity matrix to find similar modules sorted by similarity scores, excluding the input module     itself, and return a list of 10 recommended modules. 
+8. Every list of recommended modules for each corresponding module the student took is then stored in a list. 
+9. We create a dictionary of every recommended module along with how many times it appeared in each recommendation.
+10. We sort this dictionary of modules, frequency pairs by frequency, and return the first five modules with the highest frequency. 
