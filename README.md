@@ -8,7 +8,7 @@ Content Based Filtering - usage of item features to recommend other items simila
 2. Read our .csv data files with Pandas and store it in our data frames.
 3. Clean our data frames by removing unnecessary data columns.
 4. Perform text vectorization for the description of each module using the Term Frequency-Inverse Document Frequency (TF-IDF), which converts our descriptions into a numerical matrix from sklearn.feature_extraction.text.
-5. We then use the sigmoid kernel function to calculate the pairwise similarity between each module description and storing it in a matrix. We then transform the similarity scores into values between 0 and 1. 
+5. We then use the sigmoid kernel function from sklearn.metrics.pairwise to calculate the pairwise similarity between each module description and storing it in a matrix. We then transform the similarity scores into values between 0 and 1. 
 6. We now map each module title with its corresponding indice of the matrix. 
 7. Given a module title as input, we use our similarity matrix to find similar modules sorted by similarity scores, excluding the input module itself, and return a list of 10 recommended modules. 
 8. Every list of recommended modules for each corresponding module the student took is then stored in a list. 
