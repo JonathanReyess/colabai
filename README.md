@@ -43,4 +43,4 @@ Content Based Filtering - usage of item features to recommend other items simila
 7. Given a module title as input, we use our similarity matrix to find similar modules sorted by similarity scores, excluding the input module     itself, and return a list of 10 recommended modules. 
 8. Every list of recommended modules for each corresponding module the student took is then stored in a list. 
 9. We create a dictionary of every recommended module along with how many times it appeared in each recommendation.
-10. We sort this dictionary of modules, frequency pairs by frequency, and return the first five modules with the highest frequency. 
+10. We sort this dictionary of {modules, frequency} pairs by frequency, and return the first five modules with the highest frequency. 
