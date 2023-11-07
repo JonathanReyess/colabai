@@ -44,3 +44,5 @@ Content Based Filtering - usage of item features to recommend other items simila
 8. Every list of recommended modules for each corresponding module the student took is then stored in a list. 
 9. We create a dictionary of every recommended module along with how many times it appeared in each recommendation.
 10. We sort this dictionary of {modules, frequency} pairs by frequency, and return the first five modules with the highest frequency. 
+
+## 2 - Co-Lab Co-Pilot
