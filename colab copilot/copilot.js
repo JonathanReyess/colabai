@@ -1,5 +1,6 @@
 // import the required dependencies
 require("dotenv").config(); 
+const fs = require('fs');
 const OpenAI = require("openai"); //openai npm package
 const readline = require("readline").createInterface({ //prompt the user for input in our terminal
   input: process.stdin,
@@ -22,12 +23,36 @@ async function askQuestion(question) {
   
   async function main() {
     try {
+      //Upload a file with an "assistants" purpose
+      const file = await openai.files.create({
+      file: fs.createReadStream("data/Beer_recipe_orignal.json"),
+      purpose: "assistants",
+      });
+
+  /*async function main() {
+    try {
+      //Upload a file with an "assistants" purpose
+      const path = require('path');
+      const filePath = path.join(__dirname, 'data/all_modules.pdf');
+
+      if (fs.existsSync(filePath)) {
+        const file = await openai.files.create({
+          file: fs.createReadStream(filePath),
+          purpose: "assistants",
+        });
+      } else {
+        console.error(`File not found: ${filePath}`);
+      }*/    
+
       const assistant = await openai.beta.assistants.create({
         name: "Co-Lab Co-Pilot",
         instructions:
           "You are a personal assistant that helps students taking pathways courses with information relevant to their class.",
-        tools: [{ type: "code_interpreter" }], //provide the assistant with tools, such as documents
-        model: "gpt-4-1106-preview",
+        tools: [{ "type": "retrieval"}], //provide the assistant with tools, such as documents 
+        //make api call through the codeinterpreter, use weather data as testing 
+        //i'm here for my shift and logs you in, office hours helper, figure out how retrieval works 
+        model: "gpt-3.5-turbo-1106",
+        file_ids: [file.id]
       });
   
       // Log the first greeting
@@ -44,7 +69,9 @@ async function askQuestion(question) {
         const userQuestion = await askQuestion("\nHow can I help you?");
   
         // Pass in the user question into the existing thread
-        await openai.beta.threads.messages.create(thread.id, { //thread id is how we tell openai that we already have an exisiting thread and wish to use it as context
+        await openai.beta.threads.messages.create(
+          thread.id, 
+          { //thread id is how we tell openai that we already have an exisiting thread and wish to use it as context
           role: "user", //user is providing some information 
           content: userQuestion, //this is what the user input as a question in the terminal 
         });
