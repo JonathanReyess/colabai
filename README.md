@@ -46,3 +46,13 @@ Content Based Filtering - usage of item features to recommend other items simila
 10. We sort this dictionary of {modules, frequency} pairs by frequency, and return the first five modules with the highest frequency. 
 
 ## 2 - Co-Lab Co-Pilot
+
+**OpenAI API being used :** Assistants - https://platform.openai.com/docs/assistants/how-it-works 
+
+- Call models such as GPT-4 with specific instructions to tune their personality and capabilities.
+- Access multiple built-in tools in parallel, such as Code interpreter and Knowledge retrieval — or tools you build / host (via Function calling).
+- Assistants can access persistent Threads. 
+   - Threads simplify AI application development by storing message history and truncating it when the conversation gets too long for the model’s context length. You create a       Thread once, and simply append messages to it as your users reply.
+- Create files (e.g., images, spreadsheets, etc) and cite files they reference in the messages they create.
+
+
