@@ -25,13 +25,13 @@ async function askQuestion(question) {
     try {
       //Upload a file with an "assistants" purpose
       const file = await openai.files.create({
-      file: fs.createReadStream("data/Beer_recipe_orignal.json"),
+      file: fs.createReadStream("data/eprint.pdf"),
       purpose: "assistants",
       });
 
-  /*async function main() {
+  /*async function main() {           ###debugging the file retrieval 
     try {
-      //Upload a file with an "assistants" purpose
+      //Upload a file with an "assistants" purpose   
       const path = require('path');
       const filePath = path.join(__dirname, 'data/all_modules.pdf');
 
