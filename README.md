@@ -44,3 +44,39 @@ Content Based Filtering - usage of item features to recommend other items simila
 8. Every list of recommended modules for each corresponding module the student took is then stored in a list. 
 9. We create a dictionary of every recommended module along with how many times it appeared in each recommendation.
 10. We sort this dictionary of {modules, frequency} pairs by frequency, and return the first five modules with the highest frequency. 
+
+## 2 - Co-Lab Co-Pilot
+
+**OpenAI API being used :** Assistants - https://platform.openai.com/docs/assistants/how-it-works 
+
+- Call models such as GPT-4 with specific instructions to tune their personality and capabilities.
+- Access multiple built-in tools in parallel, such as Code interpreter and Knowledge retrieval — or tools you build / host (via Function calling).
+- Assistants can access persistent Threads. 
+   - Threads simplify AI application development by storing message history and truncating it when the conversation gets too long for the model’s context length. You create a       Thread once, and simply append messages to it as your users reply.
+- Create files (e.g., images, spreadsheets, etc) and cite files they reference in the messages they create.
+
+- Example: Provided the following webpage from Duke OIT - https://oit.duke.edu/service/eprint/) - we can now ask questions about content on the page.
+```
+- Hey, I'm your Co-Lab Co-Pilot! Ask me some questions!
+
+
+How can I help you?How much printing money do I get a semester?
+
+Task completed successfully
+
+I'll check the information for you. 
+
+Do you have any other questions? (yes/no) yes
+
+How can I help you?Do you have an answer?
+> 
+Task completed successfully
+
+Yes, Duke students receive an allocation of $32 per semester in black-and-white laser printing at designated ePrint stations, and undergraduate students have the option to request an increase in their printing allocation once per semester【7†source】. 
+
+Do you have any other questions? (yes/no) no
+Alrighty then, I hope you learned something!
+```
+
+
+
