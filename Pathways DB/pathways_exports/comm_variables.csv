@@ -1,0 +1,15 @@
+id,name,var_key,var_value,description,created_at,updated_at
+1,First Name,user_name,user.first_name,Name of User,2022-08-10 20:32:10.601882,2022-08-10 20:32:10.601882
+2,Course Name,course_name,course.name,Name of Course,2022-08-10 20:32:10.606007,2022-08-10 20:32:10.606007
+3,Start Time,instance_start_time,"instance.start&.strftime(""%l:%M%P"")",Start Time of the Instance (e.g. 1:00pm),2022-08-10 20:32:10.613177,2022-08-10 20:32:10.613177
+4,End Time,instance_end_time,"instance.end&.strftime(""%l:%M%P"")",End Time of the Instance (e.g. 1:00pm),2022-08-10 20:32:10.618083,2022-08-10 20:32:10.618083
+5,Module URL,module_url,"""#{ENV['SAML_WEBAPP_HOST']}/modulepage/#{course.id}""",URL for the Module Page,2022-08-16 15:16:45,2023-03-23 17:12:34.253731
+6,Start Date,instance_start_date,"instance.start&.strftime(""%B %-d, %Y"")","Start Date of the Instance (e.g. December 3, 2025)",2022-08-16 16:52:14,2022-08-16 16:52:17
+7,End Date,instance_end_date,"instance.end&.strftime(""%B %-d, %Y"")","End Date of the Instance (e.g. December 3, 2025)",2022-08-16 16:52:16,2022-08-16 16:52:18
+8,Remote URL Title,remote_url_title,instance&.remote_url_title,"Vanity title for the remote url. e.g. ""Zoom Link""",2022-08-18 23:05:42,2022-08-18 23:05:40
+9,Remote URL,remote_url,instance&.remote_url,The remote url value on the instance. Typically a zoom link.,2022-08-18 23:06:44,2022-08-18 23:06:48
+10,Location Name,location_name,instance&.location&.name,Name of the location,2022-08-18 23:07:44,2022-08-18 23:07:46
+11,Location Description,location_desc,instance&.location&.description,Description of the instance location,2022-08-18 23:08:35,2022-08-18 23:08:40
+12,Location URL,location_url,instance&.location&.url,The remote url of the Location. Typically a map link,2022-08-18 23:11:07,2022-08-18 23:11:11
+13,Instructors,instructors,"User&.find(instance&.instructors&.pluck(:user_id))&.pluck(:display_name,:email)&.map{|x| x&.join("": "")}&.join("" | "")",List of Instructors for the instance and their email,2022-08-18 23:12:47,2022-08-18 23:12:40
+14,Number of Enrollments,enroll_number,"Enroll.where(instance_id: instance.id, status: ""enroll"").count",Name of the location,2023-07-05 13:20:28.859395,2023-07-05 13:20:28.859395

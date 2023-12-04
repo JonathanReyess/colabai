@@ -4,8 +4,8 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import sigmoid_kernel
 import operator
 
-modules = pd.read_csv("data/all_modules.csv")
-student = pd.read_csv("data/student_modules.csv")
+modules = pd.read_csv("pathways rec/data/all_modules.csv")
+student = pd.read_csv("pathways rec/data/student_modules.csv")
 modules_clean_df = modules.drop(columns=['Page Number'])
 #print(modules_clean_df.info())
 #print(modules_clean_df.head)

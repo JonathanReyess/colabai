@@ -1,0 +1,50 @@
+id,offset,take_action,title,type,communicable_id,communicable_type,comm_trigger_id,created_at,updated_at
+1,,asap,User Enroll,,1,Department,1,2022-08-10 20:32:10.752786,2022-08-10 20:32:10.752786
+2,7200,before,2 Hour Course Reminder,,1,Department,1,2022-08-10 20:32:10.766650,2022-08-10 20:32:10.766650
+3,86400,before,24 Hour Course Reminder,,1,Department,1,2022-08-10 20:32:10.776277,2022-08-10 20:32:10.776277
+4,,asap,User Waitlisted,,1,Department,2,2022-08-10 20:32:10.782901,2022-08-10 20:32:10.782901
+5,,asap,User Promote from Waitlist,,1,Department,3,2022-08-10 20:32:10.792212,2022-08-10 20:32:10.792212
+6,,asap,User Cancel,,1,Department,4,2022-08-10 20:32:10.802759,2022-08-10 20:32:10.802759
+7,,asap,Admin has Canceled Course,,1,Department,7,2022-08-10 20:32:10.814542,2022-08-10 20:32:10.814542
+8,,asap,User Begins Async Course,,1,Department,5,2022-08-10 20:32:10.822263,2022-08-10 20:32:10.822263
+9,,asap,User Completed Async Course,,1,Department,6,2022-08-10 20:32:10.829599,2022-08-10 20:32:10.829599
+10,,asap,User Marked Absent,,1,Department,9,2022-08-10 20:32:10.837415,2022-08-10 20:32:10.837415
+11,,asap,User Marked Present,,1,Department,8,2022-08-10 20:32:10.846521,2022-08-10 20:32:10.846521
+35,,asap,Instance Rescheduled,,1,Department,10,2022-10-04 15:03:22.493457,2022-10-04 15:03:22.493457
+38,,asap,User Enroll,,4,Department,1,2022-10-24 15:34:18.220014,2022-10-24 15:34:18.220014
+39,7200,before,2 Hour Course Reminder,,4,Department,1,2022-10-24 15:34:18.235385,2022-10-24 15:34:18.235385
+40,,asap,Course Rescheduled,,4,Department,10,2022-10-24 15:34:18.242233,2022-10-24 15:34:18.242233
+41,86400,before,24 Hour Course Reminder,,4,Department,1,2022-10-24 15:34:18.249831,2022-10-24 15:34:18.249831
+42,,asap,User Waitlisted,,4,Department,2,2022-10-24 15:34:18.254655,2022-10-24 15:34:18.254655
+43,,asap,User Promote from Waitlist,,4,Department,3,2022-10-24 15:34:18.260441,2022-10-24 15:34:18.260441
+44,,asap,User Cancel,,4,Department,4,2022-10-24 15:34:18.266663,2022-10-24 15:34:18.266663
+45,,asap,Admin has Canceled Course,,4,Department,7,2022-10-24 15:34:18.272966,2022-10-24 15:34:18.272966
+46,,asap,User Begins Async Course,,4,Department,5,2022-10-24 15:34:18.278978,2022-10-24 15:34:18.278978
+47,,asap,User Completed Async Course,,4,Department,6,2022-10-24 15:34:18.285448,2022-10-24 15:34:18.285448
+48,,asap,User Marked Absent,,4,Department,9,2022-10-24 15:34:18.292259,2022-10-24 15:34:18.292259
+49,,asap,User Marked Present,,4,Department,8,2022-10-24 15:34:18.299007,2022-10-24 15:34:18.299007
+62,,asap,User Enroll,,6,Department,1,2023-01-25 17:10:29.394522,2023-01-25 17:10:29.394522
+63,28800,before,Day of Course Reminder,,6,Department,1,2023-01-25 17:10:29.408998,2023-02-06 22:05:16.016139
+64,,asap,Course Rescheduled,,6,Department,10,2023-01-25 17:10:29.417554,2023-01-25 17:10:29.417554
+65,288000,before,3 Day Course Reminder,,6,Department,1,2023-01-25 17:10:29.424045,2023-02-06 22:04:07.943984
+66,,asap,User Waitlisted,,6,Department,2,2023-01-25 17:10:29.431036,2023-01-25 17:10:29.431036
+67,,asap,User Promote from Waitlist,,6,Department,3,2023-01-25 17:10:29.453957,2023-01-25 17:10:29.453957
+68,,asap,User Cancel,,6,Department,4,2023-01-25 17:10:29.472343,2023-01-25 17:10:29.472343
+69,,asap,Admin has Canceled Course,,6,Department,7,2023-01-25 17:10:29.512159,2023-01-25 17:10:29.512159
+70,,asap,User Begins Async Course,,6,Department,5,2023-01-25 17:10:29.525984,2023-01-25 17:10:29.525984
+71,,asap,User Completed Async Course,,6,Department,6,2023-01-25 17:10:29.533740,2023-01-25 17:10:29.533740
+72,,asap,User Marked Absent,,6,Department,9,2023-01-25 17:10:29.556103,2023-01-25 17:10:29.556103
+73,,asap,User Marked Present,,6,Department,8,2023-01-25 17:10:29.566612,2023-01-25 17:10:29.566612
+74,,asap,User Enroll,,7,Department,1,2023-02-01 15:58:55.168498,2023-02-01 15:58:55.168498
+75,7200,before,2 Hour Course Reminder,,7,Department,1,2023-02-01 15:58:55.176836,2023-02-01 15:58:55.176836
+76,,asap,Course Rescheduled,,7,Department,10,2023-02-01 15:58:55.188133,2023-02-01 15:58:55.188133
+77,86400,before,24 Hour Course Reminder,,7,Department,1,2023-02-01 15:58:55.193427,2023-02-01 15:58:55.193427
+78,,asap,User Waitlisted,,7,Department,2,2023-02-01 15:58:55.198511,2023-02-01 15:58:55.198511
+79,,asap,User Promote from Waitlist,,7,Department,3,2023-02-01 15:58:55.205685,2023-02-01 15:58:55.205685
+80,,asap,User Cancel,,7,Department,4,2023-02-01 15:58:55.219405,2023-02-01 15:58:55.219405
+81,,asap,Admin has Canceled Course,,7,Department,7,2023-02-01 15:58:55.227097,2023-02-01 15:58:55.227097
+82,,asap,User Begins Async Course,,7,Department,5,2023-02-01 15:58:55.238725,2023-02-01 15:58:55.238725
+83,,asap,User Completed Async Course,,7,Department,6,2023-02-01 15:58:55.245901,2023-02-01 15:58:55.245901
+84,,asap,User Marked Absent,,7,Department,9,2023-02-01 15:58:55.255327,2023-02-01 15:58:55.255327
+85,,asap,User Marked Present,,7,Department,8,2023-02-01 15:58:55.265445,2023-02-01 15:58:55.265445
+87,604800,before,1 Week Course Reminder,,1,Department,1,2023-10-11 13:35:57.872458,2023-10-11 13:35:57.872458
