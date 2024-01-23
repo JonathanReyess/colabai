@@ -1,0 +1,148 @@
+id,department_id,header,title,body,created_at,updated_at
+1,1,[Co-Lab Roots] Confirmation for ${course_name},Enroll Confirmation Email,"<p>Hello ${user_name},</p>
+<p>Thank you for enrolling in&nbsp;<a href=""${module_url}""><strong><span style=""color: #2abf9c;"">${course_name}</span></strong></a>&nbsp;through the Innovation Co-Lab Roots program! We are excited to have you join us on <strong>${instance_start_date}</strong>, at <strong>${instance_start_time}</strong>.</p>
+<p>Please take a moment before class to <strong>review</strong> any <strong>prerequisites</strong> and <strong>check out</strong> the <strong>materials</strong> you will be needing to bring such as a laptop, or software to install.</p>
+<p>For any questions about the workshop please contact <strong>${instructors}</strong>.</p>
+<p>&nbsp;</p>
+<p style=""padding-left: 40px;""><strong>Workshop:</strong> <a href=""${module_url}""><span style=""color: #2abf9c;"">${course_name}</span></a></p>
+<p style=""padding-left: 40px;""><strong>Location:</strong> <a href=""${location_url}""><span style=""color: #2abf9c;"">${location_name}</span></a></p>
+<p style=""padding-left: 40px;""><strong>Zoom Link if applicable:</strong> <a href=""${remote_url}""><span style=""color: #2abf9c;"">${remote_url}</span></a></p>
+<p style=""padding-left: 40px;""><strong>Date:</strong> ${instance_start_date}, ${instance_start_time} - ${instance_end_time}</p>
+<p>&nbsp;</p>
+<p>Enjoy!</p>
+<p>&nbsp;</p>
+<p>- The Innovation Co-Lab Roots Team</p>
+<p>Questions? Email us at <a href=""mailto:colab-ops@duke.edu""><span style=""color: #2abf9c;"">colab-ops@duke.edu</span></a></p>",2022-08-10 20:32:10.755022,2022-10-19 17:43:41.805423
+2,1,[Co-Lab Roots] Reminder for ${course_name},Course Reminder Email,"<p>Hello ${user_name},</p>
+<p>We would like to remind you that <a href=""${module_url}""><strong><span style=""color: #2abf9c;"">${course_name}</span></strong></a> in which you are currently enrolled is set for&nbsp;</p>
+<p><strong>${instance_start_date}</strong>, at <strong>${instance_start_time}</strong>.</p>
+<p>Please take a moment before class to <strong>review</strong> any <strong>prerequisites</strong> and <strong>check out</strong> the <strong>materials</strong> you will be needing to bring such as a laptop, or software to install.</p>
+<p>For any questions about the workshop please contact <strong>${instructors}</strong>.</p>
+<p>&nbsp;</p>
+<p style=""padding-left: 40px;""><strong>Workshop:</strong> <a href=""${module_url}""><span style=""color: #2abf9c;"">${course_name}</span></a></p>
+<p style=""padding-left: 40px;""><strong>Location:</strong> <a href=""${location_url}""><span style=""color: #2abf9c;"">${location_name}</span></a></p>
+<p style=""padding-left: 40px;""><strong>Zoom Link if applicable:</strong> <a href=""${remote_url}""><span style=""color: #2abf9c;"">${remote_url}</span></a></p>
+<p style=""padding-left: 40px;""><strong>Date:</strong> ${instance_start_date}, ${instance_start_time} - ${instance_end_time}</p>
+<p>&nbsp;</p>
+<p>Enjoy!</p>
+<p>&nbsp;</p>
+<p>- The Innovation Co-Lab Roots Team</p>
+<p>Questions? Email us at <a href=""mailto:colab-ops@duke.edu""><span style=""color: #2abf9c;"">colab-ops@duke.edu</span></a></p>",2022-08-10 20:32:10.768596,2022-10-19 17:16:42.487409
+3,1,[Co-Lab Roots] Waitlist confirmation for ${course_name},Course Waitlist Email,"<p>Hello ${user_name},</p>
+<p>Thank you for your interest in <a href=""${module_url}""><strong><span style=""color: #2abf9c;"">${course_name}</span></strong></a><span style=""color: #2abf9c;""> </span>taking place on <strong>${instance_start_date}, ${instance_start_time} - ${instance_end_time}</strong>! The class is currently full and you have been placed on the waitlist. We will let you know if a spot opens up for you.</p>
+<p>In the meantime, make sure to check <a href=""${module_url}""><span style=""color: #2abf9c;"">the course page</span></a> to see if there are any other times available, or browse for other courses that may be of interest.</p>
+<p>&nbsp;</p>
+<p>- The Innovation Co-Lab Roots Team</p>
+<p>Questions? Email us at <a href=""mailto:colab-ops@duke.edu""><span style=""color: #2abf9c;"">colab-ops@duke.edu</span></a></p>",2022-08-10 20:32:10.784569,2022-09-08 17:45:12.748297
+4,1,[Co-Lab Roots] Enroll confirmation for ${course_name},Enroll Promotion Email,"<p>Hello ${user_name},</p>
+<p>Great news! A spot has opened up for the Innovation Co-Lab Roots module:&nbsp;<a href=""${module_url}""><strong><span style=""color: #2abf9c;"">${course_name}</span></strong></a>. &nbsp;We have moved you off the waitlist and are excited to have you join us on <strong>${instance_start_date}</strong>, at <strong>${instance_start_time}</strong>.</p>
+<p>Please take a moment before class to <strong>review</strong> any <strong>prerequisites</strong> and <strong>check out</strong> the <strong>materials</strong> you will be needing to bring such as a laptop, or software to install.</p>
+<p>For any question about the workshop please contact <strong>${instructors}</strong>.</p>
+<p>&nbsp;</p>
+<p style=""padding-left: 40px;""><strong>Workshop:</strong> <a href=""${module_url}""><span style=""color: #2abf9c;"">${course_name}</span></a></p>
+<p style=""padding-left: 40px;""><strong>Location:</strong> <a href=""${location_url}""><span style=""color: #2abf9c;"">${location_name}</span></a></p>
+<p style=""padding-left: 40px;""><strong>Zoom Link if applicable:</strong> <a href=""${remote_url}""><span style=""color: #2abf9c;"">${remote_url}</span></a></p>
+<p style=""padding-left: 40px;""><strong>Date:</strong> ${instance_start_date}, ${instance_start_time} - ${instance_end_time}</p>
+<p>&nbsp;</p>
+<p>Enjoy!</p>
+<p>&nbsp;</p>
+<p>- The Innovation Co-Lab Roots Team</p>
+<p>Questions? Email us at <a href=""mailto:colab-ops@duke.edu""><span style=""color: #2abf9c;"">colab-ops@duke.edu</span></a></p>",2022-08-10 20:32:10.795814,2022-10-13 17:22:29.220633
+5,1,[Co-Lab Roots] Cancellation Confirmation for ${course_name},User Cancel Email,"<p>Hello ${user_name},</p>
+<p>We are confirming that you have cancelled your enrollment for <a href=""${module_url}""><strong><span style=""color: #2abf9c;"">${course_name}</span></strong></a> on <strong>${instance_start_date}, ${instance_start_time} - ${instance_end_time}</strong>. We are sad to see you go, but hope you can find <a href=""searchpage""><span style=""color: #2abf9c;"">another workshop</span></a> that interests you.</p>
+<p>&nbsp;</p>
+<p>- The Innovation Co-Lab Roots Team</p>
+<p>Questions? Email us at <a href=""mailto:colab-ops@duke.edu""><span style=""color: #2abf9c;"">colab-ops@duke.edu</span></a></p>",2022-08-10 20:32:10.804257,2022-08-22 19:45:58.386941
+6,1,[Co-Lab Roots] ${course_name} has been cancelled,Admin Course Cancel Email,"<p>Hello ${user_name}.</p>
+<p>Unfortunately, due to unforeseen circumstances, <a href=""${module_url}""><strong><span style=""color: #2abf9c;"">${course_name}</span></strong></a> on <strong>${instance_start_date}, ${instance_start_time} - ${instance_end_time}</strong>&nbsp;has been cancelled. We apologize for the inconvenience, and hope you will <a href=""searchpage""><span style=""color: #2abf9c;"">check out our other courses</span></a> to see if anything else sparks your interest. We will contact you if <a href=""${module_url}""><strong><span style=""color: #2abf9c;"">${course_name}</span></strong></a> gets rescheduled this semester.</p>
+<p>&nbsp;</p>
+<p>- The Innovation Co-Lab Roots Team</p>
+<p>Questions? Email us at <a href=""mailto:colab-ops@duke.edu""><span style=""color: #2abf9c;"">colab-ops@duke.edu</span></a></p>",2022-08-10 20:32:10.815986,2023-03-21 11:46:52.336310
+7,1,[Co-Lab Roots] You have started ${course_name},Async Start Email,"<p>Hello ${user_name}.</p>
+<p>Congratulations on getting started with the self-paced course <a href=""${module_url}""><strong><span style=""color: #2abf9c;"">${course_name}</span></strong></a>! &nbsp;Remember to return to your profile in <a href=""https://pathways.duke.edu/""><span style=""color: #2abf9c;"">Pathways</span></a> in order to mark this course as completed when you're finished.</p>
+<p>If need more <strong>one-on-one support</strong> on this topic, or any other tech related topic, check out Co-Lab office hours <a style=""color: #2abf9c;"" href=""https://colab.duke.edu/resources"">here</a>.</p>
+<p>&nbsp;</p>
+<p>- The Innovation Co-Lab Roots Team</p>
+<p>Questions? Email us at <a href=""mailto:colab-ops@duke.edu""><span style=""color: #2abf9c;"">colab-ops@duke.edu</span></a></p>",2022-08-10 20:32:10.823726,2022-08-22 19:46:57.783565
+8,1,You completed ${course_name},Async Completion Email,"<p>Hello ${user_name},</p>
+<p>You completed the self-paced course <a href=""${module_url}""><strong><span style=""color: #2abf9c;"">${course_name}</span></strong></a>! That's amazing!</p>
+<p>We'd love to hear your thoughts on how your class went via our <strong><a style=""color: #2abf9c;"" href=""https://duke.qualtrics.com/jfe/form/SV_agF71ufy7lpy7xr"">anonymous survey</a></strong>!</p>
+<p>If need more <strong>one-on-one support</strong> on this topic, or any other tech related topic, check out Co-Lab office hours <a style=""color: #2abf9c;"" href=""https://colab.duke.edu/resources"">here</a>.&nbsp;</p>
+<p>If you would like to <strong>take another Roots course</strong>, check out our other courses <a style=""color: #2abf9c;"" href=""https://colab.duke.edu/roots"">here</a>.</p>
+<p>&nbsp;</p>
+<p>- The Innovation Co-Lab Roots Team</p>
+<p>Questions? Email us at <a href=""mailto:colab-ops@duke.edu""><span style=""color: #2abf9c;"">colab-ops@duke.edu</span></a></p>",2022-08-10 20:32:10.830858,2022-08-22 19:47:17.251711
+9,1,[Co-Lab Roots] Missed you at ${course_name},Course Absence Email,"<p>Hello ${user_name},</p>
+<p>Did we miss you? &nbsp;You have been marked as 'absent' for the Innovation Co-Lab Roots module ""<a href=""${module_url}""><strong><span style=""color: #2abf9c;"">${course_name}</span></strong></a>"", which has just concluded. &nbsp;If you believe this is a mistake, please contact us at colab-ops@duke.edu and we'll get it fixed for you. &nbsp;</p>
+<p>If you just couldn't make it, that's fine too! &nbsp;As a reminder, you can always cancel your enrollment at any time through your profile page. &nbsp;Hope to see you at the next one!</p>
+<p>&nbsp;</p>
+<p>- The Innovation Co-Lab Roots Team</p>
+<p>Questions? Email us at <a href=""mailto:colab-ops@duke.edu""><span style=""color: #2abf9c;"">colab-ops@duke.edu</span></a></p>",2022-08-10 20:32:10.838726,2022-08-22 19:47:41.255166
+10,1,[Co-Lab Roots] How was ${course_name}?,Course Attend Email,"<p>Hello ${user_name},</p>
+<p>Thanks for joining us for&nbsp;<a href=""${module_url}""><strong><span style=""color: #2abf9c;"">${course_name}</span></strong></a>!&nbsp;</p>
+<p>We'd love to hear your thoughts on how your class went via our <strong><a style=""color: #2abf9c;"" href=""https://duke.qualtrics.com/jfe/form/SV_agF71ufy7lpy7xr"">anonymous survey.</a></strong></p>
+<p>If need more <strong>one-on-one support</strong> on this topic, or any other tech related topic, check out Co-Lab office hours <a style=""color: #2abf9c;"" href=""https://colab.duke.edu/resources"">here</a>.&nbsp;</p>
+<p>If you would like to <strong>take another Roots course</strong>, <a href=""https://pathways.duke.edu/""><span style=""color: #2abf9c;"">check out our other courses</span></a> on Pathways, which offers great opportunities to continue your learning in this topic. &nbsp;</p>
+<p>&nbsp;</p>
+<p>- The Innovation Co-Lab Roots Team</p>
+<p>Questions? Email us at <a href=""mailto:colab-ops@duke.edu""><span style=""color: #2abf9c;"">colab-ops@duke.edu</span></a></p>",2022-08-10 20:32:10.847930,2022-08-22 19:48:06.883703
+42,1,[Co-Lab Roots] ${course_name} is starting soon!,Course Reminder Email - 2h,"<p>Hello ${user_name},</p>
+<p>We would like to remind you that your upcoming Co-Lab Roots module ""<a href=""${module_url}""><strong><span style=""color: #2abf9c;"">${course_name}</span></strong></a>"" is set to start within 2 hours.</p>
+<p>If you haven't yet, please install any required software, and make sure to bring all the required tools and materials.</p>
+<p>For any questions about the workshop please contact <strong>${instructors}</strong>.</p>
+<p>&nbsp;</p>
+<p style=""padding-left: 40px;""><strong>Workshop:</strong> <a href=""${module_url}""><span style=""color: #2abf9c;"">${course_name}</span></a></p>
+<p style=""padding-left: 40px;""><strong>Location:</strong> <a href=""${location_url}""><span style=""color: #2abf9c;"">${location_name}</span></a></p>
+<p style=""padding-left: 40px;""><strong>Zoom Link if applicable:</strong> <a href=""${remote_url}""><span style=""color: #2abf9c;"">${remote_url}</span></a></p>
+<p style=""padding-left: 40px;""><strong>Date:</strong> ${instance_start_date}, ${instance_start_time} - ${instance_end_time}</p>
+<p>&nbsp;</p>
+<p>Enjoy!</p>
+<p>&nbsp;</p>
+<p>- The Innovation Co-Lab Roots Team</p>
+<p>Questions? Email us at <a href=""mailto:colab-ops@duke.edu""><span style=""color: #2abf9c;"">colab-ops@duke.edu</span></a></p>",2022-08-18 11:39:44.662718,2022-10-19 17:17:30.241884
+66,6,Enroll confirmation for ${course_name},Enroll Confirmation Email,"<p>Hello ${user_name}, Thank you for enrolling in ${course_name}! We are excited to have you join us on ${instance_start_date}, at ${instance_start_time}. <br><br>Workshop: ${course_name}</p>
+<p>Location: ${location_name} + ${location_url}</p>
+<p>Date: ${instance_start_date}, ${instance_start_time} - ${instance_end_time} Enjoy!</p>",2023-01-25 17:10:29.397488,2023-02-25 00:00:41.346199
+67,6,Reminder for ${course_name},Course Reminder Email,"<p>Hello ${user_name}. This is a reminder that you are registered for ${course_name} on ${instance_start_date} @ ${instance_start_time}. If you are unable to attend, please drop this workshop to accomodate those on the waitlist.&nbsp;</p>
+<p>Course Location: ${location_name}</p>
+<p>Course Location URL: ${location_url}</p>",2023-01-25 17:10:29.410714,2023-02-25 00:01:40.027406
+68,6,${course_name} has been rescheduled,Course Rescheduled Email,"<p>Hello ${user_name}. This is to inform you that ${course_name} has been rescheduled for ${instance_start_date} @ ${instance_start_time}.&nbsp;<br><br></p>
+<p>Course location: ${location_name}</p>
+<p>Course location URL: ${location_url}</p>",2023-01-25 17:10:29.419161,2023-02-25 00:03:16.293428
+69,6,Waitlist confirmation for ${course_name},Course Waitlist Email,<p>Hello ${user_name}. This is to confirm that you have been placed on the waitlist for ${course_name} on ${instance_start_date} @ ${instance_start_time}</p>,2023-01-25 17:10:29.434315,2023-02-25 00:06:08.573713
+70,6,Promote confirmation for ${course_name},Enroll Promotion Email,Hello ${user_name}. This is to confirm that you have been moved off the waitlist for ${course_name} on ${instance_start_date} @ ${instance_start_time},2023-01-25 17:10:29.456490,2023-01-25 17:10:29.456490
+71,6,Cancelation Confirmation for ${course_name},User Cancel Email,<p>Hello ${user_name}. This is to confirm that you have canceled your enrollment for ${course_name} on ${instance_start_date} @ ${instance_start_time}</p>,2023-01-25 17:10:29.503193,2023-02-25 00:02:41.516399
+72,6,${course_name} has been canceled.,Admin Course Cancel Email,Hello ${user_name}. This is to confirm that you have canceld your enrollment for ${course_name} on ${instance_start_date} @ ${instance_start_time},2023-01-25 17:10:29.513812,2023-01-25 17:10:29.513812
+73,6,You have started ${course_name},Async Start Email,Hello ${user_name}. This is to confirm that you have started the async course  ${course_name},2023-01-25 17:10:29.527435,2023-01-25 17:10:29.527435
+74,6,You have started ${course_name},Asynce Completion Email,Hello ${user_name}. This is to confirm that you have completed the async course  ${course_name},2023-01-25 17:10:29.536843,2023-01-25 17:10:29.536843
+75,6,You missed ${course_name},Course Absence Email,Hello ${user_name}. You have been marked absent for ${course_name},2023-01-25 17:10:29.557858,2023-01-25 17:10:29.557858
+76,6,You started ${course_name},Course Attend Email,Hello ${user_name}. You have been marked in attendance for ${course_name},2023-01-25 17:10:29.567700,2023-01-25 17:10:29.567700
+77,7,Enroll confirmation for ${course_name},Enroll Confirmation Email,"Hello ${user_name},
+
+      Thank you for enrolling in ${course_name}! We are excited to have you join us on ${instance_start_date}, at ${instance_start_time}.
+
+      Please take a moment before class to review any prerequisites and check out the materials you will be needing to bring such as a laptop, or software to install.
+
+      For any question about the workshop please contact ${instance_instructor}.
+
+      Workshop: ${course_name}
+
+      Location: ${course_location} + ${map_url}
+
+      Zoom Link if applicable: ${zoom_url}
+
+      Date: ${instance_start_date}, ${instance_start_time} - ${instance_end_time}
+
+      Enjoy!",2023-02-01 15:58:55.170130,2023-02-01 15:58:55.170130
+78,7,Reminder for ${course_name},Course Reminder Email,Hello ${user_name}. This is a reminder that you are registerd for ${course_name} on ${instance_start_date} @ ${instance_start_time},2023-02-01 15:58:55.178155,2023-02-01 15:58:55.178155
+79,7,${course_name} has been rescheduled,Course Reschuled Email,Hello ${user_name}. This is to inform you that ${course_name} has been rescheduled for ${instance_start_date} @ ${instance_start_time},2023-02-01 15:58:55.189531,2023-02-01 15:58:55.189531
+80,7,Waitlist confirmation for ${course_name},Course Waitlist Email,Hello ${user_name}. This is to confirm that you have been placed on the waitlist for ${course_name} on ${instance_start_date} @ ${instance_start_time},2023-02-01 15:58:55.199659,2023-02-01 15:58:55.199659
+81,7,Promote confirmation for ${course_name},Enroll Promotion Email,Hello ${user_name}. This is to confirm that you have been moved off the waitlist for ${course_name} on ${instance_start_date} @ ${instance_start_time},2023-02-01 15:58:55.206794,2023-02-01 15:58:55.206794
+82,7,Cancelation Confirmation for ${course_name},User Cancel Email,Hello ${user_name}. This is to confirm that you have canceld your enrollment for ${course_name} on ${instance_start_date} @ ${instance_start_time},2023-02-01 15:58:55.221133,2023-02-01 15:58:55.221133
+83,7,${course_name} has been canceled.,Admin Course Cancel Email,Hello ${user_name}. This is to confirm that you have canceld your enrollment for ${course_name} on ${instance_start_date} @ ${instance_start_time},2023-02-01 15:58:55.228751,2023-02-01 15:58:55.228751
+84,7,You have started ${course_name},Async Start Email,Hello ${user_name}. This is to confirm that you have started the async course  ${course_name},2023-02-01 15:58:55.239993,2023-02-01 15:58:55.239993
+85,7,You have started ${course_name},Asynce Completion Email,Hello ${user_name}. This is to confirm that you have completed the async course  ${course_name},2023-02-01 15:58:55.247067,2023-02-01 15:58:55.247067
+86,7,You missed ${course_name},Course Absence Email,Hello ${user_name}. You have been marked absent for ${course_name},2023-02-01 15:58:55.256785,2023-02-01 15:58:55.256785
+87,7,You started ${course_name},Course Attend Email,Hello ${user_name}. You have been marked in attendance for ${course_name},2023-02-01 15:58:55.266975,2023-02-01 15:58:55.266975
+89,1,Congratulations!,Duke Tech Week Scavenger Hunt,"<p>You successfully found and registered for this special Pathways ""module"" for Duke Tech Week.</p>
+<p>Although this is not a real module, there are lots of great things you can learn with <a href=""searchpage"">Pathways</a>! Search around and enroll for some fun modules anytime!</p>",2023-10-02 16:12:24.058308,2023-10-02 16:18:54.188599
