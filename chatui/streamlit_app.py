@@ -1,4 +1,6 @@
-from openai import OpenAI
+from langchain.callbacks.base import BaseCallbackHandler
+from langchain.schema import ChatMessage
+from langchain_openai import ChatOpenAI
 import streamlit as st
 import base64
 
@@ -102,54 +104,45 @@ st.markdown("""
 
 unsafe_allow_html=True)
 
-# Initialize OpenAI client with the API key from Streamlit secrets
-client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+class StreamHandler(BaseCallbackHandler):
+    def __init__(self, container, initial_text=""):
+        self.container = container
+        self.text = initial_text
 
-# Check if the openai_model is not set in the session state, set it to the default model
-if "openai_model" not in st.session_state:
-    st.session_state["openai_model"] = "gpt-3.5-turbo"
+    def on_llm_new_token(self, token: str, **kwargs) -> None:
+        self.text += token
+        self.container.markdown(self.text)
 
-# Check if 'messages' are not in the session state, initialize it as an empty list
-if "messages" not in st.session_state:
-    st.session_state.messages = []
 
-# Display chat messages from the session state
+openai_api_key = st.secrets["OPENAI_API_KEY"]
+
 user = "person-fill.svg"
 assistant = "blue-bot.svg"
 
-# Check if the role is "user" or "assistant" to set the appropriate avatar. 
-for message in st.session_state.messages:
-    if message["role"] == "user":
+if "messages" not in st.session_state:
+    st.session_state["messages"] = [ChatMessage(role="assistant", avatar=assistant, content="How can I help you?")]
+
+#for msg in st.session_state.messages:
+   # st.chat_message(msg.role, msg.avatar).write(msg.content)
+
+for msg in st.session_state.messages:
+    if msg.role == "user":
         with st.chat_message("user", avatar=user):
-            st.markdown(message["content"])
-    elif message["role"] == "assistant":
+            st.markdown(msg.content)
+    elif msg.role == "assistant":
         with st.chat_message("assistant", avatar=assistant):
-            st.markdown(message["content"])
+            st.markdown(msg.content)
 
-# Get user input from the chat input box
-if prompt := st.chat_input("Ask a question..."):
-    # Add user input to session state messages
-    st.session_state.messages.append({"role": "user", "content": prompt})
-    
-    # Display user input as a chat message
-    with st.chat_message("user", avatar=user):
-        st.markdown(prompt)
+if prompt := st.chat_input():
+    st.session_state.messages.append(ChatMessage(role="user", avatar=user, content=prompt))
+    st.chat_message("user", avatar=user).write(prompt)
 
-    # Use OpenAI API to generate assistant's response
+    if not openai_api_key:
+        st.info("Please add your OpenAI API key to continue.")
+        st.stop()
+
     with st.chat_message("assistant", avatar=assistant):
-        message_placeholder = st.empty()
-        full_response = "&nbsp;&nbsp;" #add some white space before the bot responds
-        
-        # Iterate over OpenAI completions (streaming mode)
-        for response in client.chat.completions.create(
-            model=st.session_state["openai_model"],
-            messages=[
-                {"role": m["role"], "content": m["content"]}
-                for m in st.session_state.messages
-            ],
-            stream=True,
-        ):
-            full_response += (response.choices[0].delta.content or "")
-            message_placeholder.markdown(full_response + "▌")  # Display response with a streaming effect
-        message_placeholder.markdown(full_response)  # Display the final response
-    st.session_state.messages.append({"role": "assistant", "content": full_response})  # Add assistant's response to session state
+        stream_handler = StreamHandler(st.empty())
+        llm = ChatOpenAI(openai_api_key=openai_api_key, streaming=True, callbacks=[stream_handler])
+        response = llm.invoke(st.session_state.messages)
+        st.session_state.messages.append(ChatMessage(role="assistant", avatar=assistant, content=response.content))

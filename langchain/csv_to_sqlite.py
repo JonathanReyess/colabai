@@ -2,7 +2,7 @@ import sqlite3
 import pandas as pd
 
 # Read CSV into DataFrame
-df = pd.read_csv("Pathways DB/database/courses.csv")
+df = pd.read_csv("data/database/courses.csv")
 df.columns = df.columns.str.strip()
 
 # Connect to SQLite database
