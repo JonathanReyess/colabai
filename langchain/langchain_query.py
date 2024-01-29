@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-dburi = "sqlite:///Pathways DB/database/pathways.db"
+dburi = "sqlite:///data/database/pathways.db"
 db = SQLDatabase.from_uri(dburi)
 llm = OpenAI(temperature=0, verbose=True)
 db_chain = SQLDatabaseChain.from_llm(llm, db, verbose=False)

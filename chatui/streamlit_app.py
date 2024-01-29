@@ -1,8 +1,19 @@
-from langchain.callbacks.base import BaseCallbackHandler
-from langchain.schema import ChatMessage
-from langchain_openai import ChatOpenAI
 import streamlit as st
+from pathlib import Path
+from langchain.llms.openai import OpenAI
+from langchain.agents import create_sql_agent
+from langchain.sql_database import SQLDatabase
+from langchain.agents.agent_types import AgentType
+from langchain.callbacks import StreamlitCallbackHandler
+from langchain.agents.agent_toolkits import SQLDatabaseToolkit
+from langchain.schema import ChatMessage
+from sqlalchemy import create_engine
+from sqlalchemy.engine.url import URL
+from dotenv import load_dotenv
+import os
 import base64
+
+
 
 LOGO_IMAGE = "colab.png"
 
@@ -104,26 +115,35 @@ st.markdown("""
 
 unsafe_allow_html=True)
 
-class StreamHandler(BaseCallbackHandler):
-    def __init__(self, container, initial_text=""):
-        self.container = container
-        self.text = initial_text
 
-    def on_llm_new_token(self, token: str, **kwargs) -> None:
-        self.text += token
-        self.container.markdown(self.text)
+driver = '{ODBC Driver 17 for SQL Server}'
+odbc_str = 'mssql+pyodbc:///?odbc_connect=' \
+                'Driver='+driver+ \
+                ';Server=tcp:' + os.getenv("SQL_SERVER_ENDPOINT")+'.database.windows.net;PORT=1433' + \
+                ';DATABASE=' + os.getenv("SQL_SERVER_DATABASE") + \
+                ';Uid=' + os.getenv("SQL_SERVER_USERNAME")+ \
+                ';Pwd=' + os.getenv("SQL_SERVER_PASSWORD") + \
+                ';Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;'
 
+db_engine = create_engine(odbc_str) 
+db = SQLDatabase(db_engine)
 
 openai_api_key = st.secrets["OPENAI_API_KEY"]
 
 user = "person-fill.svg"
 assistant = "blue-bot.svg"
+llm = OpenAI(openai_api_key=openai_api_key, temperature=0, streaming=True)
+toolkit = SQLDatabaseToolkit(db=db, llm=llm)
 
-if "messages" not in st.session_state:
+agent = create_sql_agent(
+    llm=llm,
+    toolkit=toolkit,
+    verbose=True,
+    agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
+)
+
+if "messages" not in st.session_state or st.sidebar.button("Clear message history"):
     st.session_state["messages"] = [ChatMessage(role="assistant", avatar=assistant, content="How can I help you?")]
-
-#for msg in st.session_state.messages:
-   # st.chat_message(msg.role, msg.avatar).write(msg.content)
 
 for msg in st.session_state.messages:
     if msg.role == "user":
@@ -133,16 +153,15 @@ for msg in st.session_state.messages:
         with st.chat_message("assistant", avatar=assistant):
             st.markdown(msg.content)
 
+prompt = st.chat_input(placeholder="Ask me anything!")
+
 if prompt := st.chat_input():
     st.session_state.messages.append(ChatMessage(role="user", avatar=user, content=prompt))
     st.chat_message("user", avatar=user).write(prompt)
 
-    if not openai_api_key:
-        st.info("Please add your OpenAI API key to continue.")
-        st.stop()
 
     with st.chat_message("assistant", avatar=assistant):
-        stream_handler = StreamHandler(st.empty())
-        llm = ChatOpenAI(openai_api_key=openai_api_key, streaming=True, callbacks=[stream_handler])
-        response = llm.invoke(st.session_state.messages)
+        st_cb = StreamlitCallbackHandler(st.container())
+        response = agent.run(prompt, callbacks=[st_cb])
         st.session_state.messages.append(ChatMessage(role="assistant", avatar=assistant, content=response.content))
+
