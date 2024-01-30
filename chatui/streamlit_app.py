@@ -4,16 +4,14 @@ from langchain.llms.openai import OpenAI
 from langchain.agents import create_sql_agent
 from langchain.sql_database import SQLDatabase
 from langchain.agents.agent_types import AgentType
-from langchain.callbacks import StreamlitCallbackHandler
-from langchain.agents.agent_toolkits import SQLDatabaseToolkit
+from langchain_community.callbacks import StreamlitCallbackHandler
+from langchain_community.agent_toolkits import SQLDatabaseToolkit
 from langchain.schema import ChatMessage
 from sqlalchemy import create_engine
 from sqlalchemy.engine.url import URL
 from dotenv import load_dotenv
-import os
 import base64
-
-
+import pyodbc
 
 LOGO_IMAGE = "colab.png"
 
@@ -61,6 +59,7 @@ st.markdown(
 )
 
 st.markdown("""
+            
 <style>
 	[data-testid="stDecoration"] {
 		display: block;
@@ -115,17 +114,25 @@ st.markdown("""
 
 unsafe_allow_html=True)
 
+    # Initialize connection.
+    # Uses st.cache_resource to only run once.
+  
 
-driver = '{ODBC Driver 17 for SQL Server}'
-odbc_str = 'mssql+pyodbc:///?odbc_connect=' \
-                'Driver='+driver+ \
-                ';Server=tcp:' + os.getenv("SQL_SERVER_ENDPOINT")+'.database.windows.net;PORT=1433' + \
-                ';DATABASE=' + os.getenv("SQL_SERVER_DATABASE") + \
-                ';Uid=' + os.getenv("SQL_SERVER_USERNAME")+ \
-                ';Pwd=' + os.getenv("SQL_SERVER_PASSWORD") + \
-                ';Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;'
+driver = '{ODBC Driver 18 for SQL Server}'
 
-db_engine = create_engine(odbc_str) 
+# Construct the ODBC connection string using st.secrets
+odbc_str = (
+    'mssql+pyodbc:///?odbc_connect='
+    'Driver=' + driver +
+    ';Server=tcp:' + st.secrets["server"] + ';PORT=1433' +
+    ';DATABASE=' + st.secrets["database"] +
+    ';Uid=' + st.secrets["username"] +
+    ';Pwd=' + st.secrets["password"] +
+    ';Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;'
+)
+
+# Create the SQLAlchemy engine
+db_engine = create_engine(odbc_str)
 db = SQLDatabase(db_engine)
 
 openai_api_key = st.secrets["OPENAI_API_KEY"]
@@ -134,6 +141,7 @@ user = "person-fill.svg"
 assistant = "blue-bot.svg"
 llm = OpenAI(openai_api_key=openai_api_key, temperature=0, streaming=True)
 toolkit = SQLDatabaseToolkit(db=db, llm=llm)
+toolkit.get_tools()
 
 agent = create_sql_agent(
     llm=llm,
@@ -163,5 +171,5 @@ if prompt := st.chat_input():
     with st.chat_message("assistant", avatar=assistant):
         st_cb = StreamlitCallbackHandler(st.container())
         response = agent.run(prompt, callbacks=[st_cb])
-        st.session_state.messages.append(ChatMessage(role="assistant", avatar=assistant, content=response.content))
+        st.session_state.messages.append(ChatMessage(role="assistant", avatar=assistant, content=response))
 
