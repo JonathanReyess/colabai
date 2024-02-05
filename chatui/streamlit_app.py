@@ -139,7 +139,7 @@ openai_api_key = st.secrets["OPENAI_API_KEY"]
 
 user = "person-fill.svg"
 assistant = "blue-bot.svg"
-llm = OpenAI(openai_api_key=openai_api_key, temperature=0, streaming=True)
+llm = OpenAI(model_name="gpt-3.5-turbo-instruct", openai_api_key=openai_api_key, temperature=0, streaming=True)
 toolkit = SQLDatabaseToolkit(db=db, llm=llm)
 toolkit.get_tools()
 
