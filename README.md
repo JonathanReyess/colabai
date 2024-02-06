@@ -1,17 +1,46 @@
 # Duke Innovation Co-Lab AI Project 
 This project aims to explore the various ways in which the emerging field of artificial intelligence can be leveraged and applied to Duke University's Innovation Co-Lab. 
-## 1 - Pathways Course Recommender 
-**Recommendation system being applied:** 
 
-Content Based Filtering - usage of item features to recommend other items similar to what a user likes, based on their previous actions or explicit feedback (per Google for Developers - Machine Learning)
+
+## Data 
+
+The data primarily used throughout this project will be from Duke's Pathways database. 
+
+Duke Pathways is an online platform offered by Duke University that provides free virtual and in-person co-curricular learning opportunities for the Duke community. It aims to help individuals grow their skills through customizable education and flexible learning options.
+
+Duke Pathways was designed and built by the Office of Information Technology's Innovation Co-Lab Development Team and the Creative And User Experience team, with support from the Center for Computational Thinking. 
+
+
+## 1 - Pathways Course Recommender 
+
+**Content Based Filtering** - usage of item features to recommend other items similar to what a user likes, based on their previous actions or explicit feedback (per Google for Developers - Machine Learning)
+
+The purpose of this subproject is to develop a program that when given a 'Student' along with a list of completed 'Modules', returns a list of modules that they are likely to have interest in. 
+
+Although this task does not involve advanced neural networks or deep learning algorithms, it leverages machine learning and natural language processing (NLP) techniques. 
 
 ### Steps
 
-1. Store our two datasets in .csv format, one with a list of all modules and their descriptions, another with a student’s module history.
-2. Read our .csv data files with Pandas and store it in our data frames.
-3. Clean our data frames by removing unnecessary data columns and take into account whether the student attended the class. 
+1. One way to obtain our data is through a webscraper as demonstrated in course_recommender/pathways_scraper.py and data/scraped_data. This is an option when all the data we need can be easily accessible directly from a webpage. Webscraping enables us to gatherg data and build the datasets we need, in this case data/scraped_data/all_modules.csv and data/scraped_data/student_sample_modules.csv. 
 
-4. Perform text vectorization for the description of each module using the Term Frequency-Inverse Document Frequency (TF-IDF), which converts our descriptions into a numerical matrix from sklearn.feature_extraction.text.
+
+2. We will be utilizing Python's Pandas library to process our .csv data files and create our data frames. It's important to clean our data by removing unecessary columns and take into consideration certain conditions such as whether or not a student attended the module they enrolled for our not to ensure validity and prepare our data for our algorithms. 
+
+4. Perform text vectorization for the description of each module using the Term Frequency-Inverse Document Frequency (TF-IDF) technique. TF-IDF is a classic technique used in natural language processing tasks that:
+
+1. Measures the frequency of a term within a document, calculated as the number of times a term appears in a document divided by the total number of terms in that document (TF). 
+
+TF(t, d) = (Number of times term t appears in document d) / (Total number of terms in document d)
+
+2. Measures how unique or rare a term is across all documents in the corpus, calculated as the logarithm of the total number of documents in the corpus divided by the number of documents containing the term, with the result being scaled to prevent the domination of terms that occur in many documents. (IDF)
+
+IDF(t) = log_e(Total number of documents / Number of documents containing term t)
+
+3. Combining our TF and IDF values to indicate the importance of a term within a document relative to the entire corpus.
+
+TF-IDF(t, d) = TF(t, d) * IDF(t)
+
+5. As a result, we use the scikit-learn Python library to convert our descriptions for each module into a numerical matrix. 
 
    We can modify the following parameters when creating our TF-IDF matrix to control how TF-IDF values are calculated:
 
@@ -27,9 +56,9 @@ Content Based Filtering - usage of item features to recommend other items simila
       )
    ```
 
-   We will then produce a ***174 x 1017*** TF-IDF Matrix with numerical values for each word in each module's description, where the rows correspond to     modules and columns to unique words.
+   This produces a ***174 x 1017*** TF-IDF Matrix with numerical values for each word in each module's description, where rows correspond to each module and columns to unique words.
 
-5. We then use the sigmoid kernel function from sklearn.metrics.pairwise to calculate the pairwise similarity between each module description      and storing it in a matrix.    We then transform the similarity scores into values between 0 and 1. 
+6. We will now utilize the sigmoid kernel function to calculate the pairwise similarity between each module description and store it in another matrix. The similartiy scores returned will be a value between 0 and 1.    
 
    The sigmoid_kernel function takes the TF-IDF matrix as input and applies a sigmoid transformation to it with the following formula:
 
@@ -39,13 +68,20 @@ Content Based Filtering - usage of item features to recommend other items simila
 
    We then output a similarity matrix where each entry (i, j) represents the similarity score between module descriptions i and j.
 
-6. We now map each module title with its corresponding indice of the matrix. 
-7. Given a module title as input, we use our similarity matrix to find similar modules sorted by similarity scores, excluding the input module     itself, and return a list of 10 recommended modules. 
-8. Every list of recommended modules for each corresponding module the student took is then stored in a list. 
-9. We create a dictionary of every recommended module along with how many times it appeared in each recommendation.
-10. We sort this dictionary of {modules, frequency} pairs by frequency, and return the first five modules with the highest frequency. 
+6. Now that we have our similarity matrix, we will now map each module 'title' with its corresponding indice of the matrix. 
 
-## 2 - Co-Lab Co-Pilot
+7. Now passing a module title as input to our function, we use the similarity matrix we created from all available modules to find similar modules, excluding the input module itself, and return a list modules with the highest similarity scores. For this step, we are taking every module the student has completed and returning recommendations for that singular module specifically.
+
+8. We will store our lists of recommendations in a separate list that we will use to create a dictionary by iterating through each list. The key in this dictionary will be a module name, with the value being how many times it appears in our 2D array.  
+
+
+10. Finally sort this dictionary of {module, frequency} pairs by frequency, and return the first n modules with the highest frequency. These will be the n courses our algorithm has recommended. 
+
+
+Now this algorithm isn't perfect, other factors to consider might include whether or not the student actually enjoyed the class they completed. As it may be assumed, our algorithm is highly dependent on the modules the student has already completed. The more modules a student has taken, the better the recommendation results. 
+
+
+## 2 - OpenAI Tools 
 
 **OpenAI API being used :** Assistants - https://platform.openai.com/docs/assistants/how-it-works 
 
