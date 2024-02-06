@@ -63,7 +63,7 @@ def execute_function_call(function_name,arguments):
         results = f"Error: function {function_name} does not exist"
     return results
 
-query = "What is Make Your Own Silicone Mold about?"
+#query = "What is Make Your Own Silicone Mold about?"
 #query = "What's a course about making candles about?" #the problem with this is that OpenAI needs to first know the names of all courses available, otherwise, the name argument is not passed in properly in our api call
 #query = "Tell me a joke"
 
@@ -92,6 +92,3 @@ messages.append(
 
 call = get_gpt_response(messages)
 print(call.choices[0].message.content)
-
-
-

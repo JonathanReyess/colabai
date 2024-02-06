@@ -24,6 +24,8 @@ selenium
 
 beautifulsoup4
 
+ipykernel
+
 
 
 
