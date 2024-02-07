@@ -7,12 +7,16 @@ The data primarily used throughout this project is sourced from Duke's Pathways 
 
 Pathways was designed and built by the Office of Information Technology's Innovation Co-Lab Development Team and the Creative And User Experience team, with support from the Center for Computational Thinking.
 
-## Environment 
+## Environment
 
-All required libraries and packages can be found in requirements.txt, to install these libraries simply run pip install -r requirements.txt. 
+All required libraries and packages can be found in `requirements.txt`. To install these libraries, simply run:
 
-Make sure to set your OpenAI API Key in the .env file as OPENAI_API_KEY = "" 
+```bash
+pip install -r requirements.txt
+```
+Make sure to set your OpenAI API Key in the `.env` file as:
 
+OPENAI_API_KEY = "your_api_key_here"
 
 ## 1. Pathways Course Recommender
 
