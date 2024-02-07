@@ -16,7 +16,9 @@ pip install -r requirements.txt
 ```
 Make sure to set your OpenAI API Key in the `.env` file as:
 
+```
 OPENAI_API_KEY = "your_api_key_here"
+```
 
 ## 1. Pathways Course Recommender
 
