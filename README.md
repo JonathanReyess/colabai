@@ -36,7 +36,7 @@ While the technique employed here does not utilize advanced neural networks or d
 
 6. **Aggregation and Sorting**: Recommendations are aggregated and stored in a list, then transformed into a dictionary to count the frequency of each module recommendation. Finally, we sort the dictionary by frequency and return the top recommendations.
 
-### Note
+### Note:
 
 This algorithm's effectiveness is contingent upon the modules a student has already completed. While it provides recommendations based on similarity scores, other factors such as student preferences and enjoyment of completed courses should also be considered.
 
@@ -88,4 +88,5 @@ run status completed
 ```
 "Intro to Python" is a class designed for individuals with little to no programming experience. It focuses on teaching introductory programming concepts such as variables, input, output, strings, and loops. The course is suitable for those looking to learn the basics of programming.
 ```
+
 In this snippet, we can see that our model is able to determine when a function call is required from the query and delivers an adequate answer.
