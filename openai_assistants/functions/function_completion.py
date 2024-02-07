@@ -65,7 +65,7 @@ def execute_function_call(function_name,arguments):
 
 #query = "What is Make Your Own Silicone Mold about?"
 #query = "What's a course about making candles about?" #the problem with this is that OpenAI needs to first know the names of all courses available, otherwise, the name argument is not passed in properly in our api call
-#query = "Tell me a joke"
+query = "This is a sample query, modify it as necessary"
 
 messages = [{"role": "user", "content": query}] 
 response = get_gpt_response(messages) ##this is not returning content from the function call yet 

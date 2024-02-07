@@ -7,6 +7,13 @@ The data primarily used throughout this project is sourced from Duke's Pathways 
 
 Pathways was designed and built by the Office of Information Technology's Innovation Co-Lab Development Team and the Creative And User Experience team, with support from the Center for Computational Thinking.
 
+## Environment 
+
+All required libraries and packages can be found in requirements.txt, to install these libraries simply run pip install -r requirements.txt. 
+
+Make sure to set your OpenAI API Key in the .env file as OPENAI_API_KEY = "" 
+
+
 ## 1. Pathways Course Recommender
 
 ### Content Based Filtering
@@ -29,6 +36,50 @@ While the technique employed here does not utilize advanced neural networks or d
 
 6. **Aggregation and Sorting**: Recommendations are aggregated and stored in a list, then transformed into a dictionary to count the frequency of each module recommendation. Finally, we sort the dictionary by frequency and return the top recommendations.
 
-## Note
+### Note
 
 This algorithm's effectiveness is contingent upon the modules a student has already completed. While it provides recommendations based on similarity scores, other factors such as student preferences and enjoyment of completed courses should also be considered.
+
+
+## 2. OpenAI Assistants
+
+In Fall 2023, OpenAI unveiled their new API that enabled developers to create conversational agents with features such as "Threads" to help manage longer conversations and "Retrieval" to help store text, along with improvements to the function-calling functionality.
+
+In this subproject, we will be creating our very own assistant integrated with our Pathways API.
+
+Per OpenAI, a typical integration of the Assistants API has the following flow:
+
+- Create an Assistant in the API by defining its custom instructions and picking a model. If helpful, enable tools like Code Interpreter, Retrieval, and Function calling.
+
+    - In our use case, we will be utilizing the Function Calling tool. Per OpenAI, the basic sequence of steps for function calling are as follows:
+
+        - Call the model with the user query and a set of functions defined in the functions parameter.
+        - The model can choose to call one or more functions; if so, the content will be a stringified JSON object adhering to your custom schema (note: the model may hallucinate parameters).
+        - Parse the string into JSON in your code, and call your function with the provided arguments if they exist.
+        - Call the model again by appending the function response as a new message, and let the model summarize the results back to the user.
+
+- Create a Thread when a user starts a conversation.
+- Add Messages to the Thread as the user ask questions.
+- Run the Assistant on the Thread to trigger responses. This automatically calls the relevant tools.
+
+We will be defining a function called `get_course_description()` which takes in the name of the course and returns its description through an HTTP request.
+
+With assistants, our model will know when to call this function and how to parse our natural language to extract the name of the course we're asking about. It will then take the return value from our function, and respond to the initial question in an appropriate manner.
+
+## Example Usage
+
+**Q:** "What is Intro to Python about?" 
+
+**Output:** 
+
+```json
+run status in_progress...
+run status requires_action
+run.required_action
+RequiredAction(submit_tool_outputs=RequiredActionSubmitToolOutputs(tool_calls=[RequiredActionFunctionToolCall(id='call_36xP1bjO3RahDjDbIaAO8rTw', function=Function(arguments='{"name":"Intro to Python"}', name='get_course_description'), type='function')]), type='submit_tool_outputs')
+function_name: get_course_description and arguments: {"name":"Intro to Python"}
+run status in_progress...
+run status completed
+
+
+

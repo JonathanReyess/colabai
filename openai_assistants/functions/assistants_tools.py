@@ -93,7 +93,7 @@ def create_message_and_run(assistant,query,thread=None):
 
 run,thread = create_message_and_run(assistant=assistant,query=query)
 
-###Information about the function that we use 
+###Information about the function that we use, if it is used
 def get_function_details(run):
 
   print("\nrun.required_action\n",run.required_action)
@@ -106,7 +106,7 @@ def get_function_details(run):
 
   return function_name, arguments, function_id
 
-
+###Get our return value from the function we have called
 def submit_tool_outputs(run,thread,function_id,function_response):
     run = client.beta.threads.runs.submit_tool_outputs(
     thread_id=thread.id,
@@ -119,8 +119,6 @@ def submit_tool_outputs(run,thread,function_id,function_response):
     ]
     ) 
     return run
-
-
 
 while True:
     run = client.beta.threads.runs.retrieve(thread_id=thread.id, run_id=run.id)
