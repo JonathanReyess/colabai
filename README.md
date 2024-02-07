@@ -68,9 +68,11 @@ With assistants, our model will know when to call this function and how to parse
 
 ## Example Usage
 
-**Q:** "What is Intro to Python about?" 
-
-**Background:** 
+**Q:** 
+```
+"What is Intro to Python about?" 
+```
+**Background Operations:** 
 
 ```
 run status in_progress...
@@ -82,6 +84,8 @@ run status in_progress...
 run status completed
 ```
 
-**A:** "Intro to Python" is a class designed for individuals with little to no programming experience. It focuses on teaching introductory programming concepts such as variables, input, output, strings, and loops. The course is suitable for those looking to learn the basics of programming.
-
+**A:** 
+```
+"Intro to Python" is a class designed for individuals with little to no programming experience. It focuses on teaching introductory programming concepts such as variables, input, output, strings, and loops. The course is suitable for those looking to learn the basics of programming.
+```
 In this snippet, we can see that our model is able to determine when a function call is required from the query and delivers an adequate answer.
