@@ -70,9 +70,9 @@ With assistants, our model will know when to call this function and how to parse
 
 **Q:** "What is Intro to Python about?" 
 
-**Output:** 
+**Background:** 
 
-```json
+```
 run status in_progress...
 run status requires_action
 run.required_action
@@ -80,6 +80,8 @@ RequiredAction(submit_tool_outputs=RequiredActionSubmitToolOutputs(tool_calls=[R
 function_name: get_course_description and arguments: {"name":"Intro to Python"}
 run status in_progress...
 run status completed
+```
 
+**A:** "Intro to Python" is a class designed for individuals with little to no programming experience. It focuses on teaching introductory programming concepts such as variables, input, output, strings, and loops. The course is suitable for those looking to learn the basics of programming.
 
-
+In this snippet, we can see that our model is able to determine when a function call is required from the query and delivers an adequate answer.
