@@ -26,7 +26,7 @@ OPENAI_API_KEY = "your_api_key_here"
 
 The purpose of this subproject is to develop a program that recommends modules similar to those a user has already taken, utilizing Content Based Filtering. This method recommends items based on their features, suggesting modules similar to those a student has completed, relying on their previous actions or explicit feedback.
 
-While the technique employed here does not utilize advanced neural networks or deep learning algorithms, it leverages machine learning and natural language processing (NLP) techniques.
+While this subproject does not utilize advanced neural networks or deep learning algorithms, it leverages machine learning and natural language processing (NLP) techniques.
 
 ### Steps
 
@@ -96,3 +96,13 @@ run status completed
 ```
 
 In this snippet, we can see that our model is able to determine when a function call is required from the query and delivers an adequate answer.
+
+## 3. LangChain 
+
+LangChain is a framework for developing applications powered by language models. Chains refer to sequences of calls - whether to an LLM, a tool, or a data preprocessing step.
+
+It enables the development of applications that are context-aware and able to reason about how to answer based on the given context. 
+
+
+
+

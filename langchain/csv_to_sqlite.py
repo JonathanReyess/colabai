@@ -1,14 +1,21 @@
 import sqlite3
 import pandas as pd
 
-# Read CSV into DataFrame
-df = pd.read_csv("data/database/courses.csv")
-df.columns = df.columns.str.strip()
+def convert(csv_file, sqlite_db, table):
 
-# Connect to SQLite database
-connection = sqlite3.connect("pathways.db")
-# Use Pandas to insert data into the table
-df.to_sql("courses", connection, if_exists='replace', index=False)
+    df = pd.read_csv(csv_file)
+    df.columns = df.columns.str.strip()
 
-# Close the connection
-connection.close()
+    connection = sqlite3.connect(sqlite_db)
+
+    df.to_sql(table, connection, if_exists='replace', index=False)
+
+    connection.close()
+
+if __name__ == "__main__":
+
+    csv_file = "data/pathways_exports/courses.csv"
+    sqlite_db = "data/sample_database/pathways.db"
+    table = "courses"
+
+    convert(csv_file, sqlite_db, table)

@@ -4,6 +4,8 @@ streamlit
 
 langchain
 
+langchain-openai
+
 langchain-community
 
 charset-normalizer==2.0.9
