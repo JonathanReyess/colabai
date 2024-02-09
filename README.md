@@ -103,6 +103,24 @@ LangChain is a framework for developing applications powered by language models.
 
 It enables the development of applications that are context-aware and able to reason about how to answer based on the given context. 
 
+In this subproject, our goal will be to query a sample SQL database table made by converting our .csv file into a .db sqlite file with one table called "courses". 
+
+The overarching process will be as follows: 
+
+1. Convert question to SQL query: Model converts user input to a SQL query.
+2. Execute SQL query: Execute the SQL query.
+3. Answer the question: Model responds to user input using the query results.
+
+A sample querying script can be found in langchain/sqlchain_query.py. 
+
+### Agents 
+
+"The core idea of agents is to use a language model to choose a sequence of actions to take. In chains, a sequence of actions is hardcoded (in code). In agents, a language model is used as a reasoning engine to determine which actions to take and in which order."
+
+We would ideally want to build a more complex querying system that would handle data discrepencies, all while maximizing runtime and cost efficiency. 
+
+
+
 
 
 
