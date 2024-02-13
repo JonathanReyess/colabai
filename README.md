@@ -120,6 +120,19 @@ A sample querying script can be found in langchain/sqlchain_query.py.
 We would ideally want to build a more complex querying system that would handle data discrepencies, all while maximizing runtime and cost efficiency. 
 
 
+LangChain's SQL Agent provides a more flexible way of interacting with SQL databases, being able to answer questions based on the databases’ schema and content (like describing a specific table), recover from errors by running a generated query, catching the traceback and regenerating it correctly, answer questions that require multiple dependent queries. and save tokens by only considering the schema from relevant tables.
+
+Now, what's unique about agents compared to OpenAI's functions is that we can feed it example input-output queries into its context window. 
+
+IN `langchain/agents/sql_agent.py` we can see an example of a Langchain SQL agent that utilizes dynamic few-shot prompting. 
+
+Note that the SQL agent toolkit by default is fed our table information as context. 
+
+Dynamic few-shot prompting allows us to optimize agent performance by inserting relevant queries in the prompt that the model can use as reference. 
+
+We take in user input and select some number of examples from our curated list to add to our few-shot prompt by performing a semantic search using OpenAI's embeddings and vector store we configure to find the examples most similar to our input.
+
+Furthermore we can customize our `system_prefix` which are the set of instructions for our agent that determine its behavior. 
 
 
 
