@@ -111,28 +111,63 @@ The overarching process will be as follows:
 2. Execute SQL query: Execute the SQL query.
 3. Answer the question: Model responds to user input using the query results.
 
-A sample querying script can be found in langchain/sqlchain_query.py. 
+A sample querying script can be found in `langchain/sqlchain_query.py`. 
 
 ### Agents 
 
 "The core idea of agents is to use a language model to choose a sequence of actions to take. In chains, a sequence of actions is hardcoded (in code). In agents, a language model is used as a reasoning engine to determine which actions to take and in which order."
 
-We would ideally want to build a more complex querying system that would handle data discrepencies, all while maximizing runtime and cost efficiency. 
+We would ideally want to use agents to build a more complex querying system that would handle data discrepencies, all while maximizing runtime and cost efficiency. 
 
-
-LangChain's SQL Agent provides a more flexible way of interacting with SQL databases, being able to answer questions based on the databases’ schema and content (like describing a specific table), recover from errors by running a generated query, catching the traceback and regenerating it correctly, answer questions that require multiple dependent queries. and save tokens by only considering the schema from relevant tables.
-
-Now, what's unique about agents compared to OpenAI's functions is that we can feed it example input-output queries into its context window. 
-
-IN `langchain/agents/sql_agent.py` we can see an example of a Langchain SQL agent that utilizes dynamic few-shot prompting. 
-
-Note that the SQL agent toolkit by default is fed our table information as context. 
+In `langchain/agents/sql_agent.py` we can see an example of a Langchain SQL agent that utilizes dynamic few-shot prompting. 
 
 Dynamic few-shot prompting allows us to optimize agent performance by inserting relevant queries in the prompt that the model can use as reference. 
 
 We take in user input and select some number of examples from our curated list to add to our few-shot prompt by performing a semantic search using OpenAI's embeddings and vector store we configure to find the examples most similar to our input.
 
-Furthermore we can customize our `system_prefix` which are the set of instructions for our agent that determine its behavior. 
+We can further customize agents through the `system_prefix` which are the set of instructions for our agent that determine its behavior.
+
+### Example Usage 
+
+```
+> Entering new AgentExecutor chain...
+```
+
+```
+Invoking: `sql_db_query` with `SELECT * FROM courses WHERE description LIKE '% painting %' OR name LIKE '% painting %' LIMIT 10`
+```
+
+```
+Yes, there are painting classes available. Here are some examples:
+
+1. Course: Co-Lab Cosplay Co-op: The Series
+   Description: Are you a maker at heart? Have you always wanted to make an awesome prop or costume piece and just...
+   [More Info](https://www.kamuicosplay.com/)
+   Skills Taught: Familiarize yourself with varied fabrication methods, Plan a project from research stages to final product, Clothing Patterns, Sculpting Tools
+
+2. Course: Co-Lab Cosplay Co-op: Painting and Weathering
+   Description: If you're signed up for the Co-Lab Cosplay Co-op: The Series, you're automatically part of this one!
+   [More Info](https://www.kamuicosplay.com/)
+   Skills Taught: Learn basic hand-painting skills, Learn how to make details stand out with advanced painting skills
+   Materials provided: Brown/Red/Black Oil paints, Spray primers
+
+3. Course: Painting with Hweyon Grigoni
+   Description: A landscape painting can draw you into a space in a special way. In this 2-hour workshop, we will look at various types of landscapes, and then create our own acrylic painting to take home. We'll paint together with some loose guidelines- you will choose your own...
+
+4. Course: Day of the Dead Series: Exploratory Día de Los Muertos Acrylic Painting Workshop
+   Description: This workshop will explore what Día de Los Muertos means to us! By the end of the workshop, you will create an acrylic painting. No painting experience is required.
+   Instructor: Antonio Alanís
+
+5. Course: Portrait Painting
+   Description: Portrait painting has probably been around as long as people have been around. In this workshop we'll continue the tradition and create our own (self, other, abstract, etc.) portrait of choice. Beginners welcome. We'll cover the basics of portrait painting and attend to...
+
+Please let me know if you need more information.
+
+```
+
+```
+> Finished chain.
+```
 
 
 
