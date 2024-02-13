@@ -129,6 +129,12 @@ We can further customize agents through the `system_prefix` which are the set of
 
 ### Example Usage 
 
+**Q:**
+
+'''
+What are some classes about painting? 
+'''
+
 ```
 > Entering new AgentExecutor chain...
 ```
