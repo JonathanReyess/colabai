@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 import base64
 import pyodbc
 
-LOGO_IMAGE = "colab.png"
+LOGO_IMAGE = "public/colab.png"
 
 st.markdown(
     """
@@ -137,8 +137,8 @@ db = SQLDatabase(db_engine)
 
 openai_api_key = st.secrets["OPENAI_API_KEY"]
 
-user = "person-fill.svg"
-assistant = "blue-bot.svg"
+user = "public/person-fill.svg"
+assistant = "public/blue-bot.svg"
 llm = OpenAI(model_name="gpt-3.5-turbo-instruct", openai_api_key=openai_api_key, temperature=0, streaming=True)
 toolkit = SQLDatabaseToolkit(db=db, llm=llm)
 toolkit.get_tools()
