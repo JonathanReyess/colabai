@@ -24,7 +24,7 @@ dburi = "sqlite:///data/sample_database/pathways.db"
 db = SQLDatabase.from_uri(dburi)
 
 llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0)
-agent_executor = create_sql_agent(llm, db=db, agent_type="openai-tools", verbose=True)
+agent_executor = create_sql_agent(llm, db=db, agent_type="openai-tools", verbose=False)
 #chain.get_prompts()[0].pretty_print()
 
 context = db.get_context()
@@ -100,7 +100,7 @@ agent = create_sql_agent(
     llm=llm,
     db=db,
     prompt=full_prompt,
-    verbose=True,
+    verbose=False,
     agent_type="openai-tools",
 )
 
@@ -114,4 +114,4 @@ while True:
     with get_openai_callback() as cb:
         result = agent.invoke({"input": user_query})
         #print(f"Total Tokens: {cb.total_tokens}")
-        print(f"Answer: {result}")
+        print(result['output'])
