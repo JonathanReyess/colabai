@@ -26,6 +26,8 @@ selenium
 
 beautifulsoup4
 
+pyodbc
+
 ipykernel
 
 faiss-cpu

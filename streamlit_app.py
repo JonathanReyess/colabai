@@ -17,6 +17,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.engine.url import URL
 from dotenv import load_dotenv
 import base64
+import pyodbc
 
 
 LOGO_IMAGE = "colab.png"
