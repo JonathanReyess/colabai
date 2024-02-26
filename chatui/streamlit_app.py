@@ -19,7 +19,7 @@ from dotenv import load_dotenv
 import base64
 
 
-LOGO_IMAGE = "public/colab.png"
+LOGO_IMAGE = "colab.png"
 
 st.markdown(
     """
@@ -153,8 +153,8 @@ odbc_str = (
 db_engine = create_engine(odbc_str)
 db = SQLDatabase(db_engine)
 openai_api_key = st.secrets["OPENAI_API_KEY"]
-user = "public/person-fill.svg"
-assistant = "public/blue-bot.svg"
+user = "person-fill.svg"
+assistant = "blue-bot.svg"
 llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0)
 toolkit = SQLDatabaseToolkit(db=db, llm=llm)
 
