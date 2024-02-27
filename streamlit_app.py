@@ -135,19 +135,15 @@ unsafe_allow_html=True)
 
     # Initialize connection.
     # Uses st.cache_resource to only run once.
-  
 
-driver = '{ODBC Driver 18 for SQL Server}'
-
-# Construct the ODBC connection string using st.secrets
 odbc_str = (
-    'mssql+pyodbc:///?odbc_connect='
-    'Driver=' + driver +
-    ';Server=tcp:' + st.secrets["server"] + ';PORT=1433' +
-    ';DATABASE=' + st.secrets["database"] +
-    ';Uid=' + st.secrets["username"] +
-    ';Pwd=' + st.secrets["password"] +
-    ';Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;'
+'mssql+pyodbc:///?odbc_connect='
+'Driver={ODBC Driver 18 for SQL Server}' +
+';Server=tcp:' + st.secrets["server"] + ';PORT=1433' +
+';DATABASE=' + st.secrets["database"] +
+';Uid=' + st.secrets["username"] +
+';Pwd=' + st.secrets["password"] +
+';Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;'
 )
 
 # Create the SQLAlchemy engine
