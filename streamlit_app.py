@@ -150,7 +150,7 @@ unsafe_allow_html=True)
 @st.cache_resource
 def init_connection():
     return pyodbc.connect(
-        "DRIVER={ODBC Driver 18 for SQL Server}" +
+        "DRIVER={ODBC Driver 17 for SQL Server}" +
         ';Server=tcp:' + st.secrets["server"] + 
         ';PORT=1433' +
         ';DATABASE=' + st.secrets["database"] +
