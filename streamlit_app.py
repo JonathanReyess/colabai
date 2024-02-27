@@ -136,7 +136,7 @@ unsafe_allow_html=True)
     # Initialize connection.
     # Uses st.cache_resource to only run once.
 
-odbc_str = (
+'''odbc_str = (
 'mssql+pyodbc:///?odbc_connect='
 'Driver={ODBC Driver 18 for SQL Server}' +
 ';Server=tcp:' + st.secrets["server"] + ';PORT=1433' +
@@ -144,10 +144,38 @@ odbc_str = (
 ';Uid=' + st.secrets["username"] +
 ';Pwd=' + st.secrets["password"] +
 ';Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;'
-)
+)'''
+
+
+@st.cache_resource
+def init_connection():
+    return pyodbc.connect(
+        "DRIVER={ODBC Driver 18 for SQL Server}" +
+        ';Server=tcp:' + st.secrets["server"] + 
+        ';PORT=1433' +
+        ';DATABASE=' + st.secrets["database"] +
+        ';Uid=' + st.secrets["username"] +
+        ';Pwd=' + st.secrets["password"] 
+
+    )
+
+conn = init_connection()
+
+@st.cache_data(ttl=600)
+def run_query(query):
+    with conn.cursor() as cur:
+        cur.execute(query)
+        return cur.fetchall()
+
+rows = run_query("SELECT * from courses;")
+
+# Print results.
+for row in rows:
+    st.write(f"{row[0]} has a :{row[1]}:")
+
 
 # Create the SQLAlchemy engine
-db_engine = create_engine(odbc_str)
+'''db_engine = create_engine(conn)
 db = SQLDatabase(db_engine)
 openai_api_key = st.secrets["OPENAI_API_KEY"]
 user = "person-fill.svg"
@@ -262,3 +290,4 @@ if prompt := st.chat_input():
         response = agent.run(prompt)
         st.session_state.messages.append({"role":"assistant", "avatar":"assistant", "content": response})
         st.write(response)
+'''
