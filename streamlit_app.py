@@ -176,6 +176,10 @@ examples = [
         "input": "Are there any classes about Java?", 
         "query": "SELECT * FROM courses WHERE description LIKE '% Java %' OR name LIKE '% Java %';"
     },
+    {
+        "input": "What materials do I need for a Python class?", 
+        "query": "SELECT tools FROM courses WHERE description LIKE '% Python %' OR name LIKE '% Python %';"
+    },
     
 ]
 
@@ -198,7 +202,7 @@ You MUST double check your query before executing it. If you get an error while 
 
 DO NOT make any DML statements (INSERT, UPDATE, DELETE, DROP etc.) to the database.
 
-If the question does not seem related to the database, just return "I don't know" as the answer.
+If the question does not seem related to the database, just return "Sorry, I currently am unable to answer this question." as the answer.
 
 Here are some examples of user inputs and their corresponding SQL queries:"""
 
