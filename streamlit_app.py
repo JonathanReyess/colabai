@@ -175,7 +175,7 @@ for row in rows:
 '''
 
 # Create the SQLAlchemy engine
-db_engine = create_engine(conn)
+db_engine = create_engine(odbc_str)
 db = SQLDatabase(db_engine)
 openai_api_key = st.secrets["OPENAI_API_KEY"]
 user = "person-fill.svg"
