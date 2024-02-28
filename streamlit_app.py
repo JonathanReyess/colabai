@@ -251,7 +251,7 @@ for msg in st.session_state.messages:
 
 prompt = st.chat_input(placeholder="Ask me anything!")
 
-if prompt := st.chat_input():
+if prompt := st.chat_input(placeholder="Ask me anything!"):
     st.session_state.messages.append({"role":"user", "avatar":"user", "content": prompt })
     st.chat_message("user", avatar=user).write(prompt)
 
