@@ -249,7 +249,7 @@ for msg in st.session_state.messages:
         with st.chat_message("assistant", avatar=assistant):
             st.markdown(msg["content"])
 
-prompt = st.chat_input(placeholder="Ask me anything!")
+#prompt = st.chat_input(placeholder="Ask me anything!")
 
 if prompt := st.chat_input(placeholder="Ask me anything!"):
     st.session_state.messages.append({"role":"user", "avatar":"user", "content": prompt })
