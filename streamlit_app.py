@@ -180,6 +180,10 @@ examples = [
         "input": "What materials do I need for a Python class?", 
         "query": "SELECT tools FROM courses WHERE description LIKE '% Python %' OR name LIKE '% Python %';"
     },
+    {
+        "input": "What classes will I learn how to make a website?", 
+        "query": "SELECT name, description FROM courses WHERE description LIKE '%website%' OR description LIKE '%web development%';"
+    },
     
 ]
 
