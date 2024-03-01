@@ -217,7 +217,7 @@ Agent:
 
 Here are some Python classes:
 
-Course: Name of Course
+Course: Name of Course \n
 Description: Description of Course
 
 
