@@ -158,8 +158,9 @@ toolkit = SQLDatabaseToolkit(db=db, llm=llm)
 
 examples = [
 
-    {"input": "Give me some art classes", 
-     "query": "SELECT * FROM courses WHERE description LIKE '% Art %' OR name LIKE '% Art %';"
+    {
+        "input": "Give me some art classes", 
+        "query": "SELECT * FROM courses WHERE description LIKE '% Art %' OR name LIKE '% Art %';"
      },
 
     {
@@ -281,8 +282,8 @@ if prompt := st.chat_input(placeholder="Try 'Are there any classes about Python 
 
 
     with st.chat_message("assistant", avatar=assistant):
-        #st_cb = StreamlitCallbackHandler(st.container())
-        #response = agent.run(prompt, callbacks=[st_cb])
-        response = agent.run(prompt)
+        st_cb = StreamlitCallbackHandler(st.container())
+        response = agent.run(prompt, callbacks=[st_cb])
+        #response = agent.run(prompt)
         st.session_state.messages.append({"role":"assistant", "avatar":"assistant", "content": response})
         st.write(response)
