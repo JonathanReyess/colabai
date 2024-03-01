@@ -208,8 +208,19 @@ example_selector = SemanticSimilarityExampleSelector.from_examples(
 )
 
 system_prefix = """You are an agent designed to interact with a SQL database.
-Given an input question, create a syntactically correct {dialect} query to run, then look at the results of the query and return the answer. 
-You should include a new line after you return the course name with the description.
+Given an input question, create a syntactically correct {dialect} query to run, then look at the results of the query and return the answer.
+An example answer would be:
+
+User: What are some Python courses I can take?
+
+Agent: 
+
+Here are some Python classes:
+
+Course: Name of Course
+Description: Description of Course
+
+
 Unless the user specifies a specific number of examples they wish to obtain, always limit your query to at most 3 results.
 You can order the results by a relevant column to return the most interesting examples in the database.
 Never query for all the columns from a specific table, only ask for the relevant columns given the question.
