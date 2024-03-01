@@ -157,39 +157,46 @@ toolkit = SQLDatabaseToolkit(db=db, llm=llm)
 
 
 examples = [
+
     {"input": "Give me some art classes", 
      "query": "SELECT * FROM courses WHERE description LIKE '% Art %' OR name LIKE '% Art %';"
      },
+
     {
         "input": "What's a course about making candles about?",
         "query": "SELECT description FROM courses WHERE name LIKE '%candle%';",
     },
+
     {
         "input": "I want to learn to make video games",
         "query": "SELECT * FROM courses WHERE description LIKE '% unity %';",
     },
+
     {
         "input": "Are there any classes about video games?",
         "query": "SELECT * FROM courses WHERE description LIKE '% unity %';",
     },
+
     {
         "input": "Are there any classes about Java?", 
         "query": "SELECT * FROM courses WHERE description LIKE '% Java %' OR name LIKE '% Java %';"
     },
+
     {
         "input": "What materials do I need for a Python class?", 
         "query": "SELECT tools FROM courses WHERE description LIKE '% Python %' OR name LIKE '% Python %';"
     },
+
     {
         "input": "What classes will I learn how to make a website?", 
         "query": "SELECT name, description FROM courses WHERE description LIKE '%website%' OR description LIKE '%web development%';"
     },
+
     {
         "input": "I want to learn java What are your classes on Java?",
         "query": "SELECT * FROM courses WHERE description LIKE '% Java %' OR name LIKE '% Java %';"
     },
 
-    
 ]
 
 example_selector = SemanticSimilarityExampleSelector.from_examples(
@@ -211,7 +218,7 @@ You MUST double check your query before executing it. If you get an error while 
 
 DO NOT make any DML statements (INSERT, UPDATE, DELETE, DROP etc.) to the database.
 
-If the question does not seem related to the database, just return "Sorry, I currently am unable to answer this question." as the answer.
+If the question does not seem related to the database, just return "Sorry, I am currently unable to answer this question." as the answer.
 
 Here are some examples of user inputs and their corresponding SQL queries:"""
 
