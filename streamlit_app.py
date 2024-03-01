@@ -196,6 +196,10 @@ examples = [
         "input": "I want to learn java. What are your classes on Java?",
         "query": "SELECT * FROM courses WHERE description LIKE '% Java %' OR name LIKE '% Java %';"
     },
+    {
+        "input": "Who is Zhichen?",
+        "query": "SELECT title, bio FROM instructors WHERE bio LIKE '%Zhichen%';"
+    },
 
 ]
 
