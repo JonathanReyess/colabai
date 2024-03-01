@@ -185,7 +185,7 @@ examples = [
         "query": "SELECT name, description FROM courses WHERE description LIKE '%website%' OR description LIKE '%web development%';"
     },
     {
-        "input": "I want to learn java", "What are your classes on Java?" 
+        "input": "I want to learn java What are your classes on Java?",
         "query": "SELECT * FROM courses WHERE description LIKE '% Java %' OR name LIKE '% Java %';"
     },
 
