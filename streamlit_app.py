@@ -1,6 +1,5 @@
 import streamlit as st
 from pathlib import Path
-from langchain_openai import ChatOpenAI
 from langchain.agents import create_sql_agent
 from langchain.sql_database import SQLDatabase
 from langchain.agents.agent_types import AgentType
@@ -8,16 +7,16 @@ from langchain_community.callbacks import StreamlitCallbackHandler
 from langchain.chains.sql_database.prompt import SQL_PROMPTS
 from langchain_community.vectorstores import FAISS
 from langchain_community.agent_toolkits import SQLDatabaseToolkit
-from langchain_core.prompts import FewShotPromptTemplate, PromptTemplate
 from langchain_core.example_selectors import SemanticSimilarityExampleSelector
 from langchain_core.prompts import (ChatPromptTemplate, FewShotPromptTemplate, MessagesPlaceholder, PromptTemplate, 
                                     SystemMessagePromptTemplate,)
-from langchain_openai import OpenAIEmbeddings
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings, AzureOpenAI, AzureOpenAIEmbeddings, AzureChatOpenAI
 from sqlalchemy import create_engine
 from sqlalchemy.engine.url import URL
 from dotenv import load_dotenv
 import base64
 import pyodbc
+import os
 
 
 LOGO_IMAGE = "colab.png"
@@ -149,10 +148,20 @@ odbc_str = (
 # Create the SQLAlchemy engine
 db_engine = create_engine(odbc_str)
 db = SQLDatabase(db_engine)
-openai_api_key = st.secrets["OPENAI_API_KEY"]
+
+os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
+os.environ["OPENAI_API_TYPE"]  = st.secrets["OPENAI_API_TYPE"]
+os.environ["OPENAI_API_VERSION"] = st.secrets["OPENAI_API_VERSION"]
+os.environ["AZURE_OPENAI_ENDPOINT"]= st.secrets["AZURE_OPENAI_ENDPOINT"]
+
 user = "person-fill.svg"
 assistant = "blue-bot.svg"
-llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0)
+#llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0)
+llm = AzureChatOpenAI(
+    openai_api_version="2023-05-15",
+    deployment_name="colab-copilot",
+    model_name="gpt-35-turbo",
+)
 toolkit = SQLDatabaseToolkit(db=db, llm=llm)
 
 
@@ -189,7 +198,7 @@ examples = [
     },
 
     {
-        "input": "What classes will I learn how to make a website?", 
+        "input": "What classes will I learn how to make a website? I want to create a webapp.", 
         "query": "SELECT name, description FROM courses WHERE description LIKE '%website%' OR description LIKE '%web development%';"
     },
 
@@ -206,7 +215,8 @@ examples = [
 
 example_selector = SemanticSimilarityExampleSelector.from_examples(
     examples,
-    OpenAIEmbeddings(),
+    AzureOpenAIEmbeddings(azure_deployment="copilot-embedding",
+    openai_api_version="2023-05-15",),
     FAISS,
     k=5,
     input_keys=["input"],
