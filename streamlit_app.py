@@ -207,7 +207,7 @@ examples = [
         "query": "SELECT * FROM courses WHERE description LIKE '% Java %' OR name LIKE '% Java %';"
     },
     {
-        "input": "Who is Zhichen?",
+        "input": "Who is Zhichen? Who is Anni?",
         "query": "SELECT title, bio FROM instructors WHERE bio LIKE '%Zhichen%';"
     },
 
@@ -292,8 +292,8 @@ if prompt := st.chat_input(placeholder="Try 'Are there any classes about Python 
 
 
     with st.chat_message("assistant", avatar=assistant):
-        #st_cb = StreamlitCallbackHandler(st.container())
-        #response = agent.run(prompt, callbacks=[st_cb])
-        response = agent.run(prompt)
+        st_cb = StreamlitCallbackHandler(st.container())
+        response = agent.run(prompt, callbacks=[st_cb])
+        #response = agent.run(prompt)
         st.session_state.messages.append({"role":"assistant", "avatar":"assistant", "content": response})
         st.write(response)

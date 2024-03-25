@@ -32,6 +32,18 @@ ipykernel
 
 faiss-cpu
 
+chromadb
+
+sentence-transformers
+
+streamlit_chat 
+
+faiss-cpu 
+
+tiktoken 
+
+
+
 
 
 
