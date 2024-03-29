@@ -42,6 +42,8 @@ faiss-cpu
 
 tiktoken 
 
+pymongo[srv]
+
 
 
 

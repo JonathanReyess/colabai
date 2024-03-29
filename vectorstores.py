@@ -125,8 +125,6 @@ unsafe_allow_html=True)
     # Uses st.cache_resource to only run once.
 
 
-user_api_key = "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"
-
 loader = CSVLoader(file_path="data/pathways_exports/courses.csv", encoding="utf-8", csv_args={
                 'delimiter': ','})
 data = loader.load()
