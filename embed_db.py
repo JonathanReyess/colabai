@@ -228,14 +228,13 @@ for i in check_confidence(docs):
     print()
 #print(return_top_k("What do I do to learn cs250?"))
 
-main_client = AzureChatOpenAI(openai_api_version="2023-05-15", deployment_name="colab-copilot", model_name="gpt-35-turbo", temperature=0.7)
+main_client = AzureChatOpenAI(openai_api_version="2023-05-15", deployment_name="colab-copilot", model_name="gpt-35-turbo")
 
 
 template = """
-"You are a conversational assistant for Duke University's Innovation Co-Lab. 
+You are a conversational assistant for Duke University's Innovation Co-Lab. 
 Your job is to answer any questions related to the Innovation Co-Lab's classes called 'Roots classes'."
-The user will ask a question about I class and you will give me the best and most concise information 
-relating to that class.
+The user will ask a question about a class and you will give them the best and most concise response relating to that class.
 
 You will follow ALL the rules below: 
 
@@ -247,7 +246,10 @@ Here is the list of courses and their descriptions of the most relevant courses 
 
 If the list of courses is empty, you will tell the user that there are currently no courses available relating to that topic.
 
-If a user asks a coding conceptual related question such as "How do I reverse a linked list?" you should inform them that the Co-Lab has in-person office hours.
+If a user asks a question about you, you will tell them about yourself and what you can help them with. 
+
+ONLY if a user asks a question about coding concepts, for example "How do I reverse a linked list?", you should tell them that the Co-Lab has in-person office hours.
+
 
 """
 
