@@ -246,6 +246,9 @@ Here is the list of courses and their descriptions of the most relevant courses 
 {course_list}
 
 If the list of courses is empty, you will tell the user that there are currently no courses available relating to that topic.
+
+If a user asks a coding conceptual related question such as "How do I reverse a linked list?" you should inform them that the Co-Lab has in-person office hours.
+
 """
 
 prompt = PromptTemplate(
