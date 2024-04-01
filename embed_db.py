@@ -103,6 +103,32 @@ st.markdown("""
     [data-testid="baseButton-secondary"]{
             
     }
+    [data-testid="stNotification"]{
+        
+        background-color: rgba(0, 0, 0, 0);
+            
+        border-bottom-color: rgba(46,81,115,255);
+        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 4px;
+        border-bottom-style: solid;
+        border-bottom-width: 2px;
+            
+        border-left-color: rgba(46,81,115,255);
+        border-left-style: solid;
+        border-left-width: 2px;
+            
+        border-right-color: rgba(46,81,115,255);
+        border-right-style: solid;
+        border-right-width: 2px;
+            
+        border-top-color: rgba(46,81,115,255);
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        border-top-style: solid;
+        border-top-width: 2px;
+            
+        box-sizing: border-box; 
+    }
             
     [data-testid="stChatMessage"]{
             
@@ -157,8 +183,9 @@ except Exception as e:
 db = mdbClient["Pathways"]
 collection = db["Courses"]
 
-def return_top_k(query):
-    documents = collection.aggregate([
+
+def pipeline(query):
+    pipeline = [
                 {"$vectorSearch": {
                     "queryVector": get_text_embedding(query),
                     "path": "description_embedding",
@@ -171,14 +198,35 @@ def return_top_k(query):
                 "_id": 0,
                 "name": 1,
                 "description": 1,
+                'score': {
+                    '$meta': 'vectorSearchScore'
+      }
             
             }
         }
-            ])
+            ]
+    return pipeline
 
+
+def return_top_k(query):
+    documents = collection.aggregate(pipeline(query))
     return list(documents)
 
-#print(return_top_k("I want to learn Java programming"))
+def check_confidence(documents):
+    valid_documents = []
+    for document in documents:
+        if document['score'] > 0.73:
+            valid_documents.append(document)
+
+    return valid_documents
+
+
+docs = return_top_k("What do I do to learn cs250?")
+print(check_confidence(docs))
+for i in check_confidence(docs):
+    print(i)
+    print()
+#print(return_top_k("What do I do to learn cs250?"))
 
 main_client = AzureChatOpenAI(openai_api_version="2023-05-15", deployment_name="colab-copilot", model_name="gpt-35-turbo")
 
@@ -197,6 +245,7 @@ Below is the question the user is asking:
 Here is the list of courses and their descriptions of the most relevant courses relating to that question: 
 {course_list}
 
+If the list of courses is empty, you will tell the user that there are currently no courses available relating to that topic.
 """
 
 prompt = PromptTemplate(
@@ -209,7 +258,8 @@ chain = LLMChain(llm=main_client, prompt=prompt, verbose=False)
   
 def generate_response(message):
     courses = return_top_k(message)
-    response = chain.run(message=message, course_list=courses)
+    valid_courses = check_confidence(courses)
+    response = chain.run(message=message, course_list=valid_courses)
     return response
 
 if "messages" not in st.session_state:
@@ -244,3 +294,4 @@ if prompt := st.chat_input(placeholder="Try 'Are there any classes about Python 
         final = generate_response(prompt)
         st.session_state.messages.append({"role":"assistant", "avatar":"assistant", "content": final})
         st.write(final)
+        #st.warning('Information may be correct', icon="⚠️")
