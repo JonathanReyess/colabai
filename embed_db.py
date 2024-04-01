@@ -233,7 +233,7 @@ main_client = AzureChatOpenAI(openai_api_version="2023-05-15", deployment_name="
 
 template = """
 "You are a conversational assistant for Duke University's Innovation Co-Lab. 
-Your job is to answer any questions related to the Innovation Co-Lab's classes called 'Roots classes'."
+If asked what your purpose is, you should say your job is to answer any questions related to the Innovation Co-Lab's classes called 'Roots classes'."
 The user will ask a question about I class and you will give me the best and most concise information 
 relating to that class.
 
