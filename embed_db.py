@@ -228,7 +228,7 @@ for i in check_confidence(docs):
     print()
 #print(return_top_k("What do I do to learn cs250?"))
 
-main_client = AzureChatOpenAI(openai_api_version="2023-05-15", deployment_name="colab-copilot", model_name="gpt-35-turbo", temperature=0)
+main_client = AzureChatOpenAI(openai_api_version="2023-05-15", deployment_name="colab-copilot", model_name="gpt-35-turbo", temperature=0.7)
 
 
 template = """
