@@ -169,6 +169,7 @@ mdbClient = MongoClient(uri, server_api=ServerApi('1'))
 
 db = mdbClient["Pathways"]
 collection = db["Courses"]
+sessions_collection = db['session_ids']
 
 try:
     mdbClient.admin.command('ping')
@@ -207,28 +208,28 @@ def pipeline(query):
             ]
     return pipeline
 
-def get_session_id(file_path):
+def get_session_id():
     try:
-        with open(file_path, 'r') as file:
-            session_id = file.readline().strip()
-            return session_id
-    except FileNotFoundError:
-        print(f"Error: File '{file_path}' not found.")
+        session_doc = sessions_collection.find_one()
+        if session_doc:
+            return session_doc.get('session_id')
+        else:
+            print("No session ID found.")
+            return None
+    except Exception as e:
+        print(f"Error occurred while getting session ID: {e}")
         return None
 
-def return_top_k(query):
-    documents = collection.aggregate(pipeline(query))
-    return list(documents)
-
-
-def set_session_id(file_path, session_id):
+def set_session_id(session_id):
     try:
-        with open(file_path, 'w') as file:
-            file.write(session_id)
+        sessions_collection.update_one({}, {"$set": {'session_id': session_id}}, upsert=True)
         print("Session ID has been set successfully.")
     except Exception as e:
         print(f"Error occurred while setting session ID: {e}")
 
+def return_top_k(query):
+    documents = collection.aggregate(pipeline(query))
+    return list(documents)
 
 def check_confidence(documents):
     valid_documents = []
@@ -305,7 +306,7 @@ def generate_response(session_id, message):
 
 if "messages" not in st.session_state:
     session_id = str(uuid.uuid4())
-    set_session_id("session_ids.txt", session_id)
+    set_session_id(session_id)
     st.session_state["messages"] = [{"role":"assistant", "avatar":"assistant", "content":"How can I help you?"}]
 
 reset_button_key = "reset_button"
@@ -313,7 +314,7 @@ reset_button = st.button("Reset Chat",key=reset_button_key)
 
 if reset_button:
     session_id = str(uuid.uuid4())
-    set_session_id("session_ids.txt", session_id)
+    set_session_id(session_id)
     st.session_state["messages"] = [{"role":"assistant", "avatar":"assistant", "content":"How can I help you?"}]
     
 
@@ -336,7 +337,7 @@ if prompt := st.chat_input(placeholder="Try 'Are there any classes about Python 
 
     # Generate and display response
     with st.chat_message("assistant", avatar=assistant):
-        session_id = get_session_id('session_ids.txt')
+        session_id = get_session_id()
         if session_id:
             print("Session ID:", session_id)
         else:
