@@ -1,14 +1,18 @@
 import os
 import base64
 import streamlit as st
-from pymongo.mongo_client import MongoClient
-from pymongo.server_api import ServerApi
-from langchain.prompts import PromptTemplate
-from langchain.chains import LLMChain
-from langchain_openai import ChatOpenAI, OpenAIEmbeddings, AzureOpenAI, AzureOpenAIEmbeddings, AzureChatOpenAI
-from langchain_mongodb.chat_message_histories import MongoDBChatMessageHistory
+from langchain.chains import create_history_aware_retriever, create_retrieval_chain
+from langchain.chains.combine_documents import create_stuff_documents_chain
+from langchain_community.chat_message_histories import ChatMessageHistory
+from langchain_community.vectorstores import Chroma
+from langchain_core.chat_history import BaseChatMessageHistory
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain_core.runnables import RunnablePassthrough
 from langchain_core.runnables.history import RunnableWithMessageHistory
-import uuid 
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings, AzureOpenAI, AzureOpenAIEmbeddings, AzureChatOpenAI
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain.document_loaders.csv_loader import CSVLoader
 
 LOGO_IMAGE = "colab.png"
 
@@ -162,158 +166,83 @@ os.environ["AZURE_OPENAI_ENDPOINT"]= st.secrets["AZURE_OPENAI_ENDPOINT"]
 os.environ["OPENAI_API_TYPE"]  = st.secrets["OPENAI_API_TYPE"]
 os.environ["OPENAI_API_VERSION"] = st.secrets["OPENAI_API_VERSION"]
 
+llm = AzureChatOpenAI(openai_api_version="2023-05-15", deployment_name="colab-copilot", model_name="gpt-35-turbo")
 
-uri = "mongodb+srv://" + st.secrets["uid"] + ":" + st.secrets["mdbpassword"] + st.secrets["address"] + ".mongodb.net/?retryWrites=true&w=majority"
-#print(uri)
-mdbClient = MongoClient(uri, server_api=ServerApi('1'))
+### Construct retriever ###
+loader = CSVLoader(file_path="data/pathways_exports/courses.csv", encoding="utf-8", csv_args={
+                'delimiter': ','})
+docs = loader.load()
 
-db = mdbClient["Pathways"]
-collection = db["Courses"]
-
-try:
-    mdbClient.admin.command('ping')
-    print("Pinged your deployment. You successfully connected to MongoDB!")
-except Exception as e:
-    print(e)
-
-
-embedding_client = AzureOpenAIEmbeddings(azure_deployment="copilot-embedding", openai_api_version="2023-05-15",)
-
-def get_text_embedding(input_text):
-    response = embedding_client.embed_query(input_text)
-    return response
-#print(get_text_embedding("Hello"))
-
-def pipeline(query):
-    pipeline = [
-                {"$vectorSearch": {
-                    "queryVector": get_text_embedding(query),
-                    "path": "description_embedding",
-                    "numCandidates": 219,
-                    "limit": 10,
-                    "index": "coursesDescriptionIndex",
-                }},
-        {
-            "$project": {
-                "_id": 0,
-                "name": 1,
-                "description": 1,
-                'score': {
-                    '$meta': 'vectorSearchScore'
-      }
-            
-            }
-        }
-            ]
-    return pipeline
-
-def get_session_id(file_path):
-    try:
-        with open(file_path, 'r') as file:
-            session_id = file.readline().strip()
-            return session_id
-    except FileNotFoundError:
-        print(f"Error: File '{file_path}' not found.")
-        return None
-
-def return_top_k(query):
-    documents = collection.aggregate(pipeline(query))
-    return list(documents)
+text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+splits = text_splitter.split_documents(docs)
+vectorstore = Chroma.from_documents(documents=splits, embedding=AzureOpenAIEmbeddings(azure_deployment="copilot-embedding", openai_api_version="2023-05-15")
+)
+retriever = vectorstore.as_retriever()
+print(retriever)
 
 
-def set_session_id(file_path, session_id):
-    try:
-        with open(file_path, 'w') as file:
-            file.write(session_id)
-        print("Session ID has been set successfully.")
-    except Exception as e:
-        print(f"Error occurred while setting session ID: {e}")
-
-
-def check_confidence(documents):
-    valid_documents = []
-    for document in documents:
-        if document['score'] > 0.73:
-            valid_documents.append(document)
-
-    return valid_documents
-
-
-docs = return_top_k("What do I do to learn cs250?")
-#print(check_confidence(docs))
-
-for i in check_confidence(docs):
-    print(i)
-    print()
-#print(return_top_k("What do I do to learn cs250?"))
-
-main_client = AzureChatOpenAI(openai_api_version="2023-05-15", deployment_name="colab-copilot", model_name="gpt-35-turbo")
-
-
-template = """
-You are a conversational assistant for Duke University's Innovation Co-Lab. 
-Your job is to answer any questions related to the classes offered at the Innovation Co-Lab's."
-The user will ask a question about a class and you will give them the best and most concise response relating to that class.
-If a user asks a question about you, you will tell them about yourself and what you can help them with. 
-
-You will follow ALL the rules below:
-
-You have access to the previous conversation history and questions. Use it to answer questions like "Do you recommend any other courses?"
-
-Here is the previous conversation history and questions with the human, use this information to answer questions:
-{history}
-
-Below is the question the user is currently asking:
-{message}
-
-Here is the list of courses and their descriptions of the most relevant courses relating to that question: 
-{course_list}
-
-If the list of courses is empty, you will tell the user that there are currently no courses available relating to that topic.
-
-ONLY if a user asks a question about coding concepts, for example "How do I reverse a linked list?", you should tell them that the Co-Lab has in-person office hours.
-
-
-"""
-
-prompt = PromptTemplate(
-    input_variables=["message", "course_list", "history"],
-    template=template
+### Contextualize question ###
+contextualize_q_system_prompt = """Given a chat history and the latest user question \
+which might reference context in the chat history, formulate a standalone question \
+which can be understood without the chat history. Do NOT answer the question, \
+just reformulate it if needed and otherwise return it as is."""
+contextualize_q_prompt = ChatPromptTemplate.from_messages(
+    [
+        ("system", contextualize_q_system_prompt),
+        MessagesPlaceholder("chat_history"),
+        ("human", "{input}"),
+    ]
+)
+history_aware_retriever = create_history_aware_retriever(
+    llm, retriever, contextualize_q_prompt
 )
 
-chain = LLMChain(llm=main_client, prompt=prompt, verbose=False)
 
-  
-def generate_response(session_id, message):
-    chat_message_history = MongoDBChatMessageHistory(
-        session_id=session_id,
-        connection_string=uri,
-        database_name="chat_history",  
-        collection_name="message_store",  
-    )
-    chat_history = chat_message_history.messages 
-    #print(chat_history)
-    courses = return_top_k(message)
-    valid_courses = check_confidence(courses)
-    response = chain.run(message=message, course_list=valid_courses, history=chat_history)
+### Answer question ###
+qa_system_prompt = """You are an assistant for question-answering tasks related to Duke's Innovation Co-Lab. \
+Use the following pieces of retrieved context to answer the question. \
+If you don't know the answer, just say that you don't know. \
+Use three sentences maximum and keep the answer concise.\
 
-    chat_message_history.add_user_message(message)
-    chat_message_history.add_ai_message(response)
-    chat_message_history.add_ai_message(valid_courses)
-    return response
+{context}"""
+qa_prompt = ChatPromptTemplate.from_messages(
+    [
+        ("system", qa_system_prompt),
+        MessagesPlaceholder("chat_history"),
+        ("human", "{input}"),
+    ]
+)
+question_answer_chain = create_stuff_documents_chain(llm, qa_prompt)
+
+rag_chain = create_retrieval_chain(history_aware_retriever, question_answer_chain)
+
+
+### Statefully manage chat history ###
+store = {}
+
+
+def get_session_history(session_id: str) -> BaseChatMessageHistory:
+    if session_id not in store:
+        store[session_id] = ChatMessageHistory()
+    return store[session_id]
+
+
+conversational_rag_chain = RunnableWithMessageHistory(
+    rag_chain,
+    get_session_history,
+    input_messages_key="input",
+    history_messages_key="chat_history",
+    output_messages_key="answer",
+)
 
 
 if "messages" not in st.session_state:
-    session_id = str(uuid.uuid4())
-    set_session_id("session_ids.txt", session_id)
     st.session_state["messages"] = [{"role":"assistant", "avatar":"assistant", "content":"How can I help you?"}]
 
 reset_button_key = "reset_button"
 reset_button = st.button("Reset Chat",key=reset_button_key)
 
 if reset_button:
-    session_id = str(uuid.uuid4())
-    set_session_id("session_ids.txt", session_id)
     st.session_state["messages"] = [{"role":"assistant", "avatar":"assistant", "content":"How can I help you?"}]
     
 
@@ -336,12 +265,11 @@ if prompt := st.chat_input(placeholder="Try 'Are there any classes about Python 
 
     # Generate and display response
     with st.chat_message("assistant", avatar=assistant):
-        session_id = get_session_id('session_ids.txt')
-        if session_id:
-            print("Session ID:", session_id)
-        else:
-            print("Failed to retrieve session ID.")
-        final = generate_response(session_id, prompt)
+        final = conversational_rag_chain.invoke(
+            {"input": prompt},
+            config={
+                "configurable": {"session_id": "abc123"}
+            },  # constructs a key "abc123" in `store`.
+        )["answer"]
         st.session_state.messages.append({"role":"assistant", "avatar":"assistant", "content": final})
         st.write(final)
-

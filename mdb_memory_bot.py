@@ -191,7 +191,7 @@ def pipeline(query):
                     "queryVector": get_text_embedding(query),
                     "path": "description_embedding",
                     "numCandidates": 219,
-                    "limit": 10,
+                    "limit": 5,
                     "index": "coursesDescriptionIndex",
                 }},
         {
@@ -231,7 +231,7 @@ def return_top_k(query):
     documents = collection.aggregate(pipeline(query))
     return list(documents)
 
-def check_confidence(documents):
+def check_most_confident(documents):
     valid_documents = []
     for document in documents:
         if document['score'] > 0.73:
@@ -239,51 +239,50 @@ def check_confidence(documents):
 
     return valid_documents
 
+def check_confidence(documents):
+    valid_documents = []
+    for document in documents:
+        if document['score'] > 0.69:
+            valid_documents.append(document)
+
+    return valid_documents
+
+
 
 docs = return_top_k("What do I do to learn cs250?")
 #print(check_confidence(docs))
 
-for i in check_confidence(docs):
+for i in check_most_confident(docs):
     print(i)
     print()
 #print(return_top_k("What do I do to learn cs250?"))
 
 main_client = AzureChatOpenAI(openai_api_version="2023-05-15", deployment_name="colab-copilot", model_name="gpt-35-turbo")
 
-
 template = """
-You are a conversational assistant for Duke University's Innovation Co-Lab. 
-Your job is to answer any questions related to the classes offered at the Innovation Co-Lab's."
-The user will ask a question about a class and you will give them the best and most concise response relating to that class.
-If a user asks a question about you, you will tell them about yourself and what you can help them with. 
 
-You will follow ALL the rules below:
+You are a conversational assistant for Duke University's Innovation Co-Lab.  
 
-You have access to the previous conversation history and questions. Use it to answer questions like "Do you recommend any other courses?"
+If the user asks a question mentioning Danai, you will respond with "He is straight up DAWG". 
 
-Here is the previous conversation history and questions with the human, use this information to answer questions:
-{history}
+Otherwise, you will recommend them a course to take. 
 
-Below is the question the user is currently asking:
-{message}
+Here is the previous conversation with the user. Use this as memory for context: {history}
 
-Here is the list of courses and their descriptions of the most relevant courses relating to that question: 
-{course_list}
+Here is the question the user is asking: {message}
 
-If the list of courses is empty, you will tell the user that there are currently no courses available relating to that topic.
+Here is a list of courses offered in response to the question the user is asking: {course_list}
 
-ONLY if a user asks a question about coding concepts, for example "How do I reverse a linked list?", you should tell them that the Co-Lab has in-person office hours.
-
+If the user asks a question about a class, but the list is empty, tell the user there are no courses relating to that topic.
 
 """
 
 prompt = PromptTemplate(
-    input_variables=["message", "course_list", "history"],
+    input_variables=["message", "course_list", "history", "all_courses"],
     template=template
 )
 
 chain = LLMChain(llm=main_client, prompt=prompt, verbose=False)
-
   
 def generate_response(session_id, message):
     chat_message_history = MongoDBChatMessageHistory(
@@ -293,14 +292,20 @@ def generate_response(session_id, message):
         collection_name="message_store",  
     )
     chat_history = chat_message_history.messages 
-    #print(chat_history)
     courses = return_top_k(message)
     valid_courses = check_confidence(courses)
-    response = chain.run(message=message, course_list=valid_courses, history=chat_history)
-
+    #print(courses)
+    most_valid_courses = check_most_confident(courses)
+    print("These are valid courses")
+    print(valid_courses)
+    print("These are the most valid courses")
+    print(most_valid_courses)
+    response = chain.run(message=message, course_list=most_valid_courses, history=chat_history, all_courses=valid_courses)
     chat_message_history.add_user_message(message)
     chat_message_history.add_ai_message(response)
     chat_message_history.add_ai_message(valid_courses)
+    print("This is the chat history")
+    print(chat_history)
     return response
 
 
