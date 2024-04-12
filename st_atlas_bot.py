@@ -216,16 +216,18 @@ def check_most_confident(documents):
     for document in documents:
         if document['score'] > 0.73:
             valid_documents.append(document)
-
-    return valid_documents
+    if not valid_documents:
+        return None
+    return max(valid_documents, key=lambda x: x['score'])
 
 def check_confidence(documents):
     valid_documents = []
     for document in documents:
         if document['score'] > 0.69:
             valid_documents.append(document)
+    names = [entry['name'] for entry in valid_documents]
 
-    return valid_documents
+    return names
 
 
 main_client = AzureChatOpenAI(openai_api_version="2023-05-15", deployment_name="colab-copilot", model_name="gpt-35-turbo")
@@ -233,17 +235,21 @@ main_client = AzureChatOpenAI(openai_api_version="2023-05-15", deployment_name="
 
 template = """
 
-You are a conversational assistant for Duke University's Innovation Co-Lab.  
+You are a conversational assistant for Duke University's Innovation Co-Lab.  \
 
-If the user asks a question mentioning Danai, you will respond with "He is straight up DAWG". 
+If the user asks a question mentioning Danai, you will respond with "He is straight up DAWG". \
 
-Otherwise, you will recommend them a course to take. 
+Otherwise, you will use the information below to recommend them a course to take. \
 
-Here is the question the user is asking: {message}
+Here is the question the user is asking: {message} \
 
-Here is a list of courses offered in response to the question the user is asking: {course_list}
+This is the most relevant course: {course_list} \
 
-If the user asks a question about a class, but the list is empty, tell the user there are no courses relating to that topic.
+These courses are related, but you should only return them if there is no most relevant course: {all_courses} \
+
+If the user asks a question about a class, but the list is empty, tell the user there are no courses relating to that topic. \
+
+Use three sentences maximum and keep the answer concise. \
 
 """
 
@@ -258,12 +264,15 @@ def generate_response(message):
     courses = return_top_k(message)
     valid_courses = check_confidence(courses)
     most_valid_courses = check_most_confident(courses)
-    print("These are valid courses")
     print()
-    print(valid_courses)
-    print("These are the most valid courses")
+    print("****************This is the most valid course****************")
     print()
     print(most_valid_courses)
+    print()
+    print("****************These are valid courses****************")
+    print()
+    print(valid_courses)
+    print()
     response = chain.run(message=message, course_list=most_valid_courses, all_courses=valid_courses)
     return response
 
