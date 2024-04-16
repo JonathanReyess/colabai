@@ -191,7 +191,7 @@ def pipeline(query):
                     "path": "description_embedding",
                     "numCandidates": 219,
                     "limit": 5,
-                    "index": "coursesDescriptionIndex",
+                    "index": "vector_index",
                 }},
         {
             "$project": {
@@ -248,6 +248,10 @@ This is the most relevant course: {course_list} \
 These courses are related, but you should only return them if there is no most relevant course: {all_courses} \
 
 If the user asks a question about a class, but the list is empty, tell the user there are no courses relating to that topic. \
+
+If the user asks a question about a Duke University class (ie. CS250, CS201, CS330, CS350): You will tell them that the Co-Lab has in person office hours. \
+
+If the user asks a question about a programming concept (linked-lists, graph traversal, recursion): You will tell them that the Co-Lab has in person office hours. \
 
 Use three sentences maximum and keep the answer concise. \
 
