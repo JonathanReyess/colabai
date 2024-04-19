@@ -197,7 +197,7 @@ def pipeline(query):
             "$project": {
                 "_id": 0,
                 "name": 1,
-                "description": 1,
+                "descriptionname": 1,
                 'score': {
                     '$meta': 'vectorSearchScore'
       }
@@ -210,6 +210,8 @@ def pipeline(query):
 def return_top_k(query):
     documents = collection.aggregate(pipeline(query))
     return list(documents)
+
+#print(return_top_k("What is Rails about?"))
 
 def check_most_confident(documents):
     valid_documents = []
@@ -237,8 +239,6 @@ template = """
 
 You are a conversational assistant for Duke University's Innovation Co-Lab.  \
 
-If the user asks a question mentioning Danai, you will respond with "He is straight up DAWG". \
-
 Otherwise, you will use the information below to recommend them a course to take. \
 
 Here is the question the user is asking: {message} \
@@ -252,6 +252,12 @@ If the user asks a question about a class, but the list is empty, tell the user 
 If the user asks a question about a Duke University class (ie. CS250, CS201, CS330, CS350): You will tell them that the Co-Lab has in person office hours. \
 
 If the user asks a question about a programming concept (linked-lists, graph traversal, recursion): You will tell them that the Co-Lab has in person office hours. \
+
+If the user asks a question mentioning Danai, you will respond with "He is straight up DAWG". \
+
+ONLY Danai is straight up DAWG. No one else. \
+
+You shouldn't tell anyone about Danai being a straight up DAWG unless they ask. \
 
 Use three sentences maximum and keep the answer concise. \
 
