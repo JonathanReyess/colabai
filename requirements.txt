@@ -1,24 +1,4 @@
-pymssql==2.2.7
-
-streamlit
-
-langchain
-
-langchain-openai
-
-langchain-community
-
-charset-normalizer==2.0.9
-
-openai
-
-pyyaml
-
-python-dotenv
-
-sqlalchemy
-
-streamlit-chat
+pandas
 
 scikit-learn
 
@@ -26,30 +6,23 @@ selenium
 
 beautifulsoup4
 
+requests
+
+langchain
+
+langchain-openai
+
+langchain-mongodb
+
+dotenv
+
+python-dotenv
+
+streamlit
+
+pymongo
+
 pyodbc==5.0.1
-
-ipykernel
-
-faiss-cpu
-
-chromadb
-
-sentence-transformers
-
-streamlit_chat 
-
-faiss-cpu 
-
-tiktoken 
-
-pymongo[srv]
-
-
-
-
-
-
-
 
 
 

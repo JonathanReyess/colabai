@@ -9,6 +9,16 @@ Pathways was designed and built by the Office of Information Technology's Innova
 
 ## Environment
 
+Let's first setup a virtual environment with miniconda. https://docs.anaconda.com/free/miniconda/index.html
+
+conda create -n <env_name> python=<python_version>
+
+conda create -n colab python=3.11.7
+
+conda activate <env_name>
+
+
+
 All required libraries and packages can be found in `requirements.txt`. To install these libraries, simply run:
 
 ```bash
@@ -170,6 +180,22 @@ Please let me know if you need more information.
 ```
 > Finished chain.
 ```
+
+### MongoDB Atlas and Compass 
+
+### Vector Embeddings
+
+### Streamlit 
+
+### Azure SQL Server Bot (DEPRECATED)
+## How it was more tedious because of pymssql==2.2.7 and hard to integrate with LC, ODBC drivers (pyodbc==5.0.1).
+
+### Azure OpenAI
+
+### Moving Forward 
+
+
+Update the requirements.txt file. and talk about the technology used. 
 
 
 
