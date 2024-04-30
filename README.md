@@ -200,10 +200,12 @@ We will first need to set up our SQL database. For our use case, let's use Micro
 
 Once our server is up and running, we will need the following information from our database connection string: 
 
+```
 server = "server-name.database.windows.net" # Your az SQL server name
 database = "database-name" SQL server DB name 
 username = "username" # SQL server username 
 password = "password" # SQL server password
+```
 
 We will store this information in a file called "secrets.toml" under our .streamlit folder. Inside this folder, you should also include 
 information such as your Azure OpenAI credentials. 
@@ -211,6 +213,7 @@ information such as your Azure OpenAI credentials.
 
 In st_sql_bot.py, we will then connect to our database through SQL Alchemy and create our database enine with the following connection string: 
 
+```
 odbc_str = (
 'mssql+pyodbc:///?odbc_connect='
 'Driver={ODBC Driver 17 for SQL Server}' +
@@ -220,15 +223,18 @@ odbc_str = (
 ';Pwd=' + st.secrets["password"] +
 ';Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;'
 )
+```
 
-We will then use LangChain to connect our SQL Database to our GPT-3.5 model: 
+We will then use LangChain to connect our SQL Database to our GPT-3.5 model:
 
+```
 llm = AzureChatOpenAI(
     openai_api_version="2023-05-15",
     deployment_name="colab-copilot",
     model_name="gpt-35-turbo",
 )
 toolkit = SQLDatabaseToolkit(db=db, llm=llm)
+```
 
 ## Few-Shot Prompting 
 
@@ -238,6 +244,7 @@ In our case, we will be using dynamic few-shot prompting, which further enhances
 
 We will first create a list of examples for our chatbot to reference: 
 
+```
 examples = [
 
     {
@@ -249,6 +256,7 @@ examples = [
         "input": "What's a course about making candles about?",
         "query": "SELECT description FROM courses WHERE name LIKE '%candle%';",
     },
+```
 
 This will give our chatbot an idea of what a question might look like, and what we expect it to do. 
 
@@ -263,6 +271,7 @@ OpenAI offers several embedding models (https://platform.openai.com/docs/guides/
 We will specifically embed the user's question along with all examples we have provided our model. Then, we will perform FAISS
 (Facebook AI Similarity Search - a library for efficient similarity search and clustering of dense vectors ) between the two.  
 
+```
 example_selector = SemanticSimilarityExampleSelector.from_examples(
     examples,
     AzureOpenAIEmbeddings(azure_deployment="copilot-embedding",
@@ -271,6 +280,7 @@ example_selector = SemanticSimilarityExampleSelector.from_examples(
     k=5,
     input_keys=["input"],
 )
+```
 
 We will then return the top 5 examples that are most similar to our question, and our model will do the rest depending on our instructions in "system_prefix".  
 
@@ -284,8 +294,10 @@ Prompt engineering is crucial because generative AI, while powerful, requires co
 
 Here's a chunk from our SQL Bot's prompt as an example:
 
+```
 system_prefix = """You are an agent designed to interact with a SQL database.
 Given an input question, create a syntactically correct {dialect} query to run, then look at the results of the query and return the answer.'''
+```
 
 ## MongoDB Atlas Bot 
 
@@ -296,19 +308,6 @@ If we can embed a list of examples and a user's question to peform dynamic few-s
 We will host our course data from 'data/pathways_exports/courses.csv' as a MongoDB collection. Similar to how we had to initially connect to our SQL Server database, we will first need to establish a connection with our MongoDB cluster.
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-### MongoDB Atlas and Compass 
 
 
 
