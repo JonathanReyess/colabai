@@ -11,12 +11,15 @@ Pathways was designed and built by the Office of Information Technology's Innova
 
 Let's first setup a virtual environment with miniconda. https://docs.anaconda.com/free/miniconda/index.html
 
+```
 conda create -n <env_name> python=<python_version>
-
+```
+```
 conda create -n colab python=3.11.7
-
+```
+```
 conda activate <env_name>
-
+```
 
 
 All required libraries and packages can be found in `requirements.txt`. To install these libraries, simply run:
@@ -207,7 +210,7 @@ username = "username" # SQL server username
 password = "password" # SQL server password
 ```
 
-We will store this information in a file called "secrets.toml" under our .streamlit folder. Inside this folder, you should also include 
+We will store this information in a file called `secrets.toml`under our `.streamlit` folder. Inside this folder, you should also include 
 information such as your Azure OpenAI credentials. 
 
 
@@ -305,9 +308,9 @@ In line with what we've done so far, we will continue to use Streamlit for UI an
 
 If we can embed a list of examples and a user's question to peform dynamic few-shot prompting, it would only be rational to then ask "Why not embed our whole databse and perform FAISS with the user question?" And that's exactly what we are going to do. 
 
-We will host our course data from 'data/pathways_exports/courses.csv' as a MongoDB collection. Similar to how we had to initially connect to our SQL Server database, we will first need to establish a connection with our MongoDB cluster.
+We will host our course data from `data/pathways_exports/courses.csv` as a MongoDB collection. Similar to how we had to initially connect to our SQL Server database, we will first need to establish a connection with our MongoDB cluster.
 
-We will store the following in our '.streamlit/secrets.toml' file. 
+We will store the following in our `.streamlit/secrets.toml` file. 
 
 ```
 mdbpassword = "password"
@@ -331,16 +334,56 @@ Benefits of vector search include semantic understanding, scalability for large 
 
 For information on how to set this up, follow: https://www.mongodb.com/developer/products/atlas/semantic-search-mongodb-atlas-vector-search/
 
+Now let's examine lines 187 to 208 of our code. 
 
+```
+def pipeline(query):
+    pipeline = [
+                {"$vectorSearch": {
+                    "queryVector": get_text_embedding(query),
+                    "path": "description_embedding",
+                    "numCandidates": 219,
+                    "limit": 5,
+                    "index": "vector_index",
+                }},
+        {
+            "$project": {
+                "_id": 0,
+                "name": 1,
+                "descriptionname": 1,
+                'score': {
+                    '$meta': 'vectorSearchScore'
+      }
+            
+            }
+        }
+            ]
+    return pipeline
+```
 
-## How it was more tedious because of pymssql==2.2.7 and hard to integrate with LC, ODBC drivers (pyodbc==5.0.1).
+Here we see the question parameter `query` being passed into our `get_text_embedding()` function which uses OpenAI's `text-embedding-3-small` to embed our question. We then perform similar search with `description_embedding`, a field within our MongoDB collection that is automatically through a trigger that embeds our description of courses whenever new data is aggregated. We consider all 219 courses and only return the top 5 most similar. Our `vector_index` uses cosine similarity and approximate nearest neighbor (ANN) search with the Hierarchical Navigable Small Worlds (HNSW) algorithm. ANN optimizes for speed by approximating the most similar vectors in multi-dimensional space without scanning every vector. This approach is particularly useful for retrieving data from large vector datasets.
+THe `$project` field indicates what our pipeline will return after the similarity search is done with `0` denoting `no return` and `1` denoting `return`. In this case, we only want the `name` and `description` of the courses along with their `score`. 
+
+Score is useful in our case as it captures and allows us to filter any matches that may be high in semenatic similarity, but not relevant to eachother. For example `Java` and `JavaScript` are two completely different coding languages, however, as we see here:
+
+```
+Query: I want to learn Java.
+
+``` 
+
+```
+Reponse: {'name': 'Intro to JavaScript', 'descriptionname': '<p>What is Javascript? Is it related to Java? What is vanillaJS? Is it hard to learn? I know you have many questions, and this workshop is here to help you bust these myths. Javascript is a front-end development language. It can help you build a website and make it ....[redacted for clarity], 'score': 0.6352804899215698}]
+```
+
+As we can see, JavaScript classes are still returned due to the semantic similarity in `Java`, however, the confidence score is relatively low at `0.635`. This is where our functions `check_confidence` and `check_most_confident` come into play, allowing us to only pass as context the courses that meet a minimum confidence threshold. 
+
+## Memory 
 
 ### Azure OpenAI
 
 ### Moving Forward 
 
 
-Update the requirements.txt file. and talk about the technology used. 
 
 
 

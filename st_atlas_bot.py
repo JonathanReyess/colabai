@@ -211,7 +211,7 @@ def return_top_k(query):
     documents = collection.aggregate(pipeline(query))
     return list(documents)
 
-#print(return_top_k("What is Rails about?"))
+print(return_top_k("I want to learn Java"))
 
 def check_most_confident(documents):
     valid_documents = []
