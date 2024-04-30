@@ -334,7 +334,7 @@ Benefits of vector search include semantic understanding, scalability for large 
 
 For information on how to set this up, follow: https://www.mongodb.com/developer/products/atlas/semantic-search-mongodb-atlas-vector-search/
 
-Now let's examine lines 187 to 208 of our code. 
+Let's examine our pipeline. 
 
 ```
 def pipeline(query):
@@ -360,7 +360,6 @@ Score is useful in our case as it captures and allows us to filter any matches t
 
 ```
 Query: I want to learn Java.
-
 ``` 
 
 ```
