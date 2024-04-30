@@ -326,7 +326,7 @@ This excerpt illustrates the use of prompts to guide the AI agent in understandi
 
 ## MongoDB Atlas Bot
 
-Continuing with our established approach, we will persist with Streamlit for both UI development and hosting, alongside LangChain and vector embeddings.
+Continuing with our established approach, we will be using Streamlit for both UI development and hosting, alongside LangChain and vector embeddings.
 
 Considering the capability to embed a list of examples and a user's question for dynamic few-shot prompting, it's logical to extend this concept further. Why not embed our entire database and perform FAISS (Facebook AI Similarity Search) with the user question? That's precisely our next step.
 
