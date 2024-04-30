@@ -183,7 +183,7 @@ Please let me know if you need more information.
 > Finished chain.
 ```
 
-## Deprecated: Azure SQL Server Bot
+## 3. Deprecated: Azure SQL Server Bot
 
 Based on the test run results above, it's logical to explore the creation of a conversational chatbot leveraging a large-language model's SQL querying capabilities.
 
@@ -324,7 +324,7 @@ Given an input question, create a syntactically correct {dialect} query to run, 
 
 This excerpt illustrates the use of prompts to guide the AI agent in understanding its role and task within the context of interacting with a SQL database.
 
-## MongoDB Atlas Bot
+## 4. MongoDB Atlas Bot
 
 Continuing with our established approach, we will be using Streamlit for both UI development and hosting, alongside LangChain and vector embeddings.
 
@@ -392,7 +392,7 @@ The `$project` field specifies what our pipeline will return after the similarit
 
 The `score` is crucial as it allows us to filter out matches that may be high in semantic similarity but not relevant to each other. For instance, even though "Java" and "JavaScript" are semantically similar, they are distinct languages. We utilize functions like `check_confidence` and `check_most_confident` to filter out courses based on a minimum confidence threshold before passing them as context.
 
-## Memory
+### Memory
 
 In `mdb_memory_bot.py`, you'll find a version of our MongoDB Atlas integrated with memory capabilities. It leverages LangChain's `MongoDBChatMessageHistory` and `RunnableWithMessageHistory` to retrieve message history with the user and provide it as context to the prompt.
 
@@ -409,7 +409,7 @@ The `session_id` enables us to retrieve the appropriate context from our collect
 
 Currently, we haven't progressed with this version of the chatbot due to compatibility issues with Streamlit Cloud.
 
-## Deployment
+### Deployment
 
 To run the application locally, execute `streamlit run st_atlas_bot.py` in your preferred IDE's terminal. Prior to running, ensure the existence of a `.streamlit/secrets.toml` file containing your Azure OpenAI and MongoDB URI credentials. It's crucial not to share these credentials with anyone. Instead, employ a local `.gitignore` file to safeguard sensitive information.
 
@@ -426,7 +426,7 @@ With each git push, your application will promptly update. Ensure that all requi
 
 ### Moving Forward
 
-Our focus lies on enhancing consistency and accuracy within our project through prompt engineering. To achieve this, we aim to dockerize the project and manage it independently, enabling us to implement memory and session management effectively. Our ideal trajectory involves establishing a multi-agent workflow: initially classifying user questions using a model, then directing them to a relevant language model with tailored context and prompts for optimal responses. This approach ensures that each query receives the most suitable and accurate answer, refining the user experience and bolstering the project's efficacy.
+Looking towards the future, our focus lies on enhancing consistency and accuracy within our project through prompt engineering. Furthermore we aim to dockerize the project and manage it independently, enabling us to implement memory and session management effectively. Our ideal trajectory involves establishing a multi-agent workflow: initially classifying user questions using a model, then directing them to a relevant language model with tailored context and prompts for optimal responses. This approach ensures that each query receives the most suitable and accurate answer, refining the user experience and bolstering the project's efficacy.
 
 
 
