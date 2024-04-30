@@ -21,7 +21,6 @@ conda create -n colab python=3.11.7
 conda activate <env_name>
 ```
 
-
 All required libraries and packages can be found in `requirements.txt`. To install these libraries, simply run:
 
 ```bash
@@ -184,53 +183,66 @@ Please let me know if you need more information.
 > Finished chain.
 ```
 
-## Azure SQL Server Bot (DEPRECATED)
+## Deprecated: Azure SQL Server Bot
 
-Given the results of the test run above, it would only be rational to then try and create a conversational chatbot using a large-language model's SQL querying capabilities
-
+Based on the test run results above, it's logical to explore the creation of a conversational chatbot leveraging a large-language model's SQL querying capabilities.
 
 ### Streamlit 
 
-Streamlit is a free and open-source Python-based framework to rapidly build and share machine learning and data science web apps. 
+Streamlit is a powerful, free, and open-source Python framework designed for rapid development and sharing of machine learning and data science web applications.
 
-From here on outward, we will be using Streamlit to design our chatbot's user interface and deploy it to the web.
+From this point forward, we'll utilize Streamlit to design the user interface of our chatbot and deploy it to the web, enabling seamless interaction with our users.
 
-For more information on Streamlit, visit https://streamlit.io 
+For further information about Streamlit and its capabilities, visit [Streamlit's official website](https://streamlit.io).
 
-### SQL Server 
+### Azure OpenAI Setup
 
-We will first need to set up our SQL database. For our use case, let's use Microsoft Azure's SQL Server. 
+Moving forward, we'll transition to using Azure's OpenAI Studio to manage our models. Follow the provided documentation to set up this resource and deploy our models:
 
-Once our server is up and running, we will need the following information from our database connection string: 
+[Microsoft Azure OpenAI Studio Documentation](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/create-resource?pivots=web-portal)
+
+Once your Azure OpenAI Studio resource is configured, populate the following environment variables and store them in a file named `secrets.toml` under our `.streamlit` folder:
+
+```toml
+[azure_openai]
+OPENAI_API_KEY = "your-azure-openai-api-key-here"
+AZURE_OPENAI_ENDPOINT = "your-azure-openai-endpoint-here"
+OPENAI_API_VERSION = "2023-05-15"
+OPENAI_API_TYPE = "azure"
+```
+
+These environment variables will facilitate secure communication with Azure's OpenAI services, ensuring seamless integration of our models into our application architecture.
+
+### SQL Server Setup
+
+To initiate our SQL database, we'll utilize Microsoft Azure's SQL Server. Once the server is operational, we'll require specific information from our database connection string:
 
 ```
-server = "server-name.database.windows.net" # Your az SQL server name
-database = "database-name" # SQL server DB name 
-username = "username" # SQL server username 
-password = "password" # SQL server password
+server = "server-name.database.windows.net"  # Your Azure SQL server name
+database = "database-name"  # SQL server DB name
+username = "username"  # SQL server username
+password = "password"  # SQL server password
 ```
 
-We will store this information in a file called `secrets.toml`under our `.streamlit` folder. Inside this folder, you should also include 
-information such as your Azure OpenAI credentials. 
+These details will be securely stored in `secrets.toml` under our `.streamlit` folder.
 
+In `st_sql_bot.py`, we'll establish a connection to our database using SQL Alchemy and create our database engine with the following connection string:
 
-In st_sql_bot.py, we will then connect to our database through SQL Alchemy and create our database enine with the following connection string: 
-
-```
+```python
 odbc_str = (
-'mssql+pyodbc:///?odbc_connect='
-'Driver={ODBC Driver 17 for SQL Server}' +
-';Server=tcp:' + st.secrets["server"] + ';PORT=1433' +
-';DATABASE=' + st.secrets["database"] +
-';Uid=' + st.secrets["username"] +
-';Pwd=' + st.secrets["password"] +
-';Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;'
+    'mssql+pyodbc:///?odbc_connect='
+    'Driver={ODBC Driver 17 for SQL Server}' +
+    ';Server=tcp:' + st.secrets["server"] + ';PORT=1433' +
+    ';DATABASE=' + st.secrets["database"] +
+    ';Uid=' + st.secrets["username"] +
+    ';Pwd=' + st.secrets["password"] +
+    ';Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;'
 )
 ```
 
-We will then use LangChain to connect our SQL Database to our GPT-3.5 model:
+Next, we'll leverage LangChain to link our SQL Database with our GPT-3.5 model:
 
-```
+```python
 llm = AzureChatOpenAI(
     openai_api_version="2023-05-15",
     deployment_name="colab-copilot",
@@ -239,78 +251,88 @@ llm = AzureChatOpenAI(
 toolkit = SQLDatabaseToolkit(db=db, llm=llm)
 ```
 
-### Few-Shot Prompting 
+This setup enables seamless interaction between our SQL Database and the GPT-3.5 model, facilitating sophisticated querying and responses based on user input.
 
-Few-shot prompting is a technique that involves dynamically selecting and formatting examples based on input to provide context for a model. It's useful for chat models as it allows for adaptation to various conversational scenarios. We can tailor examples to suit our specific Q&A needs, ensuring the model's responses are relevant and accurate. 
+### Few-Shot Prompting
 
-In our case, we will be using dynamic few-shot prompting, which further enhances this capability by allowing examples to be chosen based on semantic similarity to the input, improving the model's contextual understanding and response quality.
+Few-shot prompting is a technique employed to dynamically select and format examples based on input to provide context for a model. This approach is particularly useful for chat models as it allows adaptation to various conversational scenarios, ensuring that the model's responses remain relevant and accurate.
 
-We will first create a list of examples for our chatbot to reference: 
+In our context, we're leveraging dynamic few-shot prompting, which further enhances this capability by enabling examples to be chosen based on semantic similarity to the input. This enhances the model's contextual understanding and improves response quality.
 
-```
+To start, we create a list of examples for our chatbot to reference:
+
+```python
 examples = [
-
     {
-        "input": "Give me some art classes", 
+        "input": "Give me some art classes",
         "query": "SELECT * FROM courses WHERE description LIKE '% Art %' OR name LIKE '% Art %';"
-     },
-
+    },
     {
         "input": "What's a course about making candles about?",
         "query": "SELECT description FROM courses WHERE name LIKE '%candle%';",
     },
+]
 ```
 
-This will give our chatbot an idea of what a question might look like, and what we expect it to do. 
+These examples provide our chatbot with insights into what questions might look like and the expected responses.
 
-Now here's where the magic happens. 
+Now, let's dive into the dynamic few-shot prompting process, where the magic happens. This approach dynamically selects and formats examples based on semantic similarity to the input, thereby enriching the model's understanding and enabling it to provide more contextually relevant responses.
 
 ### Vector Embeddings
 
-Vector embeddings are numerical representations that capture the meaning and relationships of various data types, such as words, sentences, and more. They transform data into points in a multidimensional space, where similar points cluster together. These representations facilitate efficient data processing and enable tasks like sentiment analysis. 
+Vector embeddings are numerical representations that capture the semantic meaning and relationships of various data types, such as words, sentences, and more. By transforming data into points in a multidimensional space, vector embeddings enable efficient data processing and support tasks like sentiment analysis and semantic similarity comparison.
 
-OpenAI offers several embedding models (https://platform.openai.com/docs/guides/embeddings). In essence, such model will enable us to turn our words into numbers and map these numbers into a matrix where similar words are closer to eachother. 
+OpenAI provides a variety of embedding models, each tailored for specific use cases ([OpenAI Embeddings Guide](https://platform.openai.com/docs/guides/embeddings)). These models convert words into numerical representations and organize them in a matrix where similar words are positioned closer to each other.
 
-We will specifically embed the user's question along with all examples we have provided our model. Then, we will perform FAISS
-(Facebook AI Similarity Search - a library for efficient similarity search and clustering of dense vectors ) between the two.  
+In our scenario, we aim to embed both the user's question and all examples provided to our model. Subsequently, we will utilize FAISS (Facebook AI Similarity Search), a library designed for efficient similarity search and clustering of dense vectors, to compare the embeddings.
 
-```
+```python
 example_selector = SemanticSimilarityExampleSelector.from_examples(
     examples,
-    AzureOpenAIEmbeddings(azure_deployment="copilot-embedding",
-    openai_api_version="2023-05-15",),
+    AzureOpenAIEmbeddings(
+        azure_deployment="copilot-embedding",
+        openai_api_version="2023-05-15",
+    ),
     FAISS,
     k=5,
     input_keys=["input"],
 )
 ```
 
-We will then return the top 5 examples that are most similar to our question, and our model will do the rest depending on our instructions in "system_prefix".  
+By employing FAISS, we can efficiently identify the top 5 examples most similar to our question. From there, our model can execute further instructions based on the provided "system_prefix". This approach streamlines the process of finding relevant examples and enhances the user experience by offering contextually appropriate responses.
 
-### Prompt Engineering 
+### Prompt Engineering
 
-Prompt engineering involves guiding generative AI to produce desired outputs by crafting detailed instructions in the form of prompts. These prompts are natural language texts that specify tasks for the AI to perform. In prompt engineering, we carefully design prompts, selecting appropriate formats, phrases, and symbols to guide the AI to interact meaningfully with users. This process involves creativity and experimentation to refine prompts until desired outcomes are achieved.
+Prompt engineering is the art of guiding generative AI systems to produce desired outputs by crafting detailed instructions in the form of prompts. These prompts are natural language texts that articulate specific tasks for the AI to perform. In prompt engineering, meticulous attention is given to designing prompts, selecting appropriate formats, phrases, and symbols to effectively guide the AI to interact meaningfully with users. This iterative process involves creativity and experimentation, refining prompts until the desired outcomes are consistently achieved.
 
-Prompt engineering is crucial because generative AI, while powerful, requires context and detailed instructions to generate accurate and relevant responses. By systematically designing prompts, we ensure that AI applications produce meaningful and usable content. Prompt engineering also provides greater developer control over AI interactions, improves user experience by delivering coherent and relevant responses, and increases flexibility by enabling reuse of prompts across different scenarios and domains.
+The significance of prompt engineering lies in providing generative AI systems with the necessary context and instructions to generate accurate and relevant responses. By systematically designing prompts, developers can ensure that AI applications produce meaningful and usable content. Prompt engineering offers several benefits, including:
 
-[Per Amazon Web Services]
+- **Greater Developer Control:** Prompt engineering empowers developers to exert control over AI interactions by providing detailed instructions, leading to more predictable behavior and outcomes.
+  
+- **Improved User Experience:** Well-designed prompts result in coherent and relevant responses from AI systems, enhancing the overall user experience and satisfaction.
+  
+- **Increased Flexibility:** Reusable prompts can be adapted across different scenarios and domains, enabling developers to leverage existing prompts and streamline development processes.
 
-Here's a chunk from our SQL Bot's prompt as an example:
+[Adapted from Amazon Web Services]
 
-```
+Here's a snippet from our SQL Bot's prompt as an example:
+
+```python
 system_prefix = """You are an agent designed to interact with a SQL database.
-Given an input question, create a syntactically correct {dialect} query to run, then look at the results of the query and return the answer.'''
+Given an input question, create a syntactically correct {dialect} query to run, then look at the results of the query and return the answer."""
 ```
 
-## MongoDB Atlas Bot 
+This excerpt illustrates the use of prompts to guide the AI agent in understanding its role and task within the context of interacting with a SQL database.
 
-In line with what we've done so far, we will continue to use Streamlit for UI and hosting purposes along with LangChain and vector embeddings.
+## MongoDB Atlas Bot
 
-If we can embed a list of examples and a user's question to peform dynamic few-shot prompting, it would only be rational to then ask "Why not embed our whole databse and perform FAISS with the user question?" And that's exactly what we are going to do. 
+Continuing with our established approach, we will persist with Streamlit for both UI development and hosting, alongside LangChain and vector embeddings.
 
-We will host our course data from `data/pathways_exports/courses.csv` as a MongoDB collection. Similar to how we had to initially connect to our SQL Server database, we will first need to establish a connection with our MongoDB cluster.
+Considering the capability to embed a list of examples and a user's question for dynamic few-shot prompting, it's logical to extend this concept further. Why not embed our entire database and perform FAISS (Facebook AI Similarity Search) with the user question? That's precisely our next step.
 
-We will store the following in our `.streamlit/secrets.toml` file. 
+We intend to host our course data from `data/pathways_exports/courses.csv` as a MongoDB collection. Similar to our initial connection setup with the SQL Server database, we'll need to establish a connection with our MongoDB cluster.
+
+To facilitate this, we'll store the necessary credentials in our `.streamlit/secrets.toml` file:
 
 ```
 mdbpassword = "password"
@@ -318,61 +340,93 @@ address = "address"
 uid = "user-id"
 ```
 
-Once these are set, we can connect to our database. 
+Once these credentials are configured, we can connect to our database using the following code snippet:
 
-```
+```python
 uri = "mongodb+srv://" + st.secrets["uid"] + ":" + st.secrets["mdbpassword"] + st.secrets["address"] + ".mongodb.net/?retryWrites=true&w=majority"
 
 mdbClient = MongoClient(uri, server_api=ServerApi('1'))
 ```
 
+This setup ensures secure access to our MongoDB cluster, enabling seamless interaction with our course data for enhanced user experiences.
+
 ### Atlas Vector Search
 
-Vector search is a semantic search capability that utilizes machine learning models to transform various types of data, such as text, audio, or images, into high-dimensional vectors. These vectors capture the semantic meaning of the data, enabling searches based on similarities in the vector space rather than exact text matches. This technique complements traditional keyword-based search and enhances the capabilities of large language models (LLMs) by providing additional context. Vector search allows for finding relevant results even when exact wording is unknown, making it useful in natural language processing and recommendation systems.
+Vector search is a sophisticated semantic search method that utilizes machine learning models to transform various types of data, like text, audio, or images, into high-dimensional vectors. These vectors capture the semantic meaning of the data, enabling searches based on similarities in the vector space rather than exact text matches. This technique complements traditional keyword-based search and enhances the capabilities of large language models (LLMs) by providing additional context. Vector search is particularly useful in natural language processing and recommendation systems, allowing for finding relevant results even when exact wording is unknown.
 
 Benefits of vector search include semantic understanding, scalability for large datasets, and flexibility to search different types of data. With MongoDB, vector search is efficient as vectors are stored together with the original data, ensuring consistency and simplicity in the application architecture. MongoDB Atlas supports scalable vector search, both horizontally and vertically, providing efficiency and reliability for demanding workloads.
 
-For information on how to set this up, follow: https://www.mongodb.com/developer/products/atlas/semantic-search-mongodb-atlas-vector-search/
+To set up vector search with MongoDB Atlas, follow the guide at: [MongoDB Atlas Vector Search](https://www.mongodb.com/developer/products/atlas/semantic-search-mongodb-atlas-vector-search/)
 
-Let's examine our pipeline. 
+Now, let's delve into our pipeline.
 
-```
+```python
 def pipeline(query):
-    pipeline = [{"$vectorSearch": {
-                    "queryVector": get_text_embedding(query),
-                    "path": "description_embedding",
-                    "numCandidates": 219,
-                    "limit": 5,
-                    "index": "vector_index",}},
-        {"$project": {
+    pipeline = [
+        {
+            "$vectorSearch": {
+                "queryVector": get_text_embedding(query),
+                "path": "description_embedding",
+                "numCandidates": 219,
+                "limit": 5,
+                "index": "vector_index",
+            }
+        },
+        {
+            "$project": {
                 "_id": 0,
                 "name": 1,
                 "descriptionname": 1,
-                'score': {
-                    '$meta': 'vectorSearchScore' }}]
+                "score": {"$meta": "vectorSearchScore"},
+            }
+        }
+    ]
     return pipeline
 ```
 
-Here we see the question parameter `query` being passed into our `get_text_embedding()` function which uses OpenAI's `text-embedding-3-small` to embed our question. We then perform similar search with `description_embedding`, a field within our MongoDB collection that is automatically through a trigger that embeds our description of courses whenever new data is aggregated. We consider all 219 courses and only return the top 5 most similar. Our `vector_index` uses cosine similarity and approximate nearest neighbor (ANN) search with the Hierarchical Navigable Small Worlds (HNSW) algorithm. ANN optimizes for speed by approximating the most similar vectors in multi-dimensional space without scanning every vector. This approach is particularly useful for retrieving data from large vector datasets.
-THe `$project` field indicates what our pipeline will return after the similarity search is done with `0` denoting `no return` and `1` denoting `return`. In this case, we only want the `name` and `description` of the courses along with their `score`. 
+In this pipeline, the `query` parameter is passed into our `get_text_embedding()` function, which employs OpenAI's `text-embedding-3-small` to embed our question. We then conduct a similarity search using `description_embedding`, a field within our MongoDB collection automatically embedded through a trigger whenever new data is aggregated. We consider all 219 courses and return only the top 5 most similar ones.
 
-Score is useful in our case as it captures and allows us to filter any matches that may be high in semenatic similarity, but not relevant to eachother. For example `Java` and `JavaScript` are two completely different coding languages, however, as we see here:
+Our `vector_index` employs cosine similarity and an approximate nearest neighbor (ANN) search with the Hierarchical Navigable Small Worlds (HNSW) algorithm. ANN optimizes for speed by approximating the most similar vectors in multi-dimensional space without scanning every vector, which is particularly useful for retrieving data from large vector datasets.
 
+The `$project` field specifies what our pipeline will return after the similarity search. In this case, we only want the `name` and `description` of the courses along with their `score`.
+
+The `score` is crucial as it allows us to filter out matches that may be high in semantic similarity but not relevant to each other. For instance, even though "Java" and "JavaScript" are semantically similar, they are distinct languages. We utilize functions like `check_confidence` and `check_most_confident` to filter out courses based on a minimum confidence threshold before passing them as context.
+
+## Memory
+
+In `mdb_memory_bot.py`, you'll find a version of our MongoDB Atlas integrated with memory capabilities. It leverages LangChain's `MongoDBChatMessageHistory` and `RunnableWithMessageHistory` to retrieve message history with the user and provide it as context to the prompt.
+
+```python
+    chat_message_history = MongoDBChatMessageHistory(
+        session_id=session_id, # the user's session id
+        connection_string=uri, # your MongoDB connection string URI
+        database_name="",   # name of your MDB database storing chat messages
+        collection_name="",  # name of your MDB collection containing chat logs
+    )
 ```
-Query: I want to learn Java.
-``` 
 
-```
-Reponse: {'name': 'Intro to JavaScript', 'descriptionname': '<p>What is Javascript? Is it related to Java? What is vanillaJS? Is it hard to learn? I know you have many questions, and this workshop is here to help you bust these myths. Javascript is a front-end development language. It can help you build a website and make it ....[redacted for clarity], 'score': 0.6352804899215698}]
-```
+The `session_id` enables us to retrieve the appropriate context from our collection and should be updated whenever a new conversation begins.
 
-As we can see, JavaScript classes are still returned due to the semantic similarity in `Java`, however, the confidence score is relatively low at `0.635`. This is where our functions `check_confidence` and `check_most_confident` come into play, allowing us to only pass as context the courses that meet a minimum confidence threshold. 
+Currently, we haven't progressed with this version of the chatbot due to compatibility issues with Streamlit Cloud.
 
-## Memory 
+## Deployment
 
-### Azure OpenAI
+To run the application locally, execute `streamlit run st_atlas_bot.py` in your preferred IDE's terminal. Prior to running, ensure the existence of a `.streamlit/secrets.toml` file containing your Azure OpenAI and MongoDB URI credentials. It's crucial not to share these credentials with anyone. Instead, employ a local `.gitignore` file to safeguard sensitive information.
 
-### Moving Forward 
+For hosting, we'll leverage Streamlit's free community cloud services, facilitating deployment, management, and global accessibility of our application.
+
+Upon cloning this repository:
+
+1. Sign in to Streamlit via Github or SSO (https://share.streamlit.io/signup)
+2. Select this repository, the desired branch, and the file `st_atlas_bot.py`
+3. Initiate deployment by clicking "Deploy"!
+
+With each git push, your application will promptly update. Ensure that all required files for Streamlit are not nested within any directories.
+
+
+### Moving Forward
+
+Our focus lies on enhancing consistency and accuracy within our project through prompt engineering. To achieve this, we aim to dockerize the project and manage it independently, enabling us to implement memory and session management effectively. Our ideal trajectory involves establishing a multi-agent workflow: initially classifying user questions using a model, then directing them to a relevant language model with tailored context and prompts for optimal responses. This approach ensures that each query receives the most suitable and accurate answer, refining the user experience and bolstering the project's efficacy.
 
 
 
