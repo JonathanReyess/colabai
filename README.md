@@ -348,7 +348,7 @@ uri = "mongodb+srv://" + st.secrets["uid"] + ":" + st.secrets["mdbpassword"] + s
 mdbClient = MongoClient(uri, server_api=ServerApi('1'))
 ```
 
-This setup ensures secure access to our MongoDB cluster, enabling seamless interaction with our course data for enhanced user experiences.
+This setup ensures secure access to our MongoDB cluster, enabling seamless interaction with our course data.
 
 ### Atlas Vector Search
 
