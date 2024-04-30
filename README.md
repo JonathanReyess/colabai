@@ -276,12 +276,28 @@ We will then return the top 5 examples that are most similar to our question, an
 
 ## Prompt Engineering 
 
-
 Prompt engineering involves guiding generative AI to produce desired outputs by crafting detailed instructions in the form of prompts. These prompts are natural language texts that specify tasks for the AI to perform. In prompt engineering, we carefully design prompts, selecting appropriate formats, phrases, and symbols to guide the AI to interact meaningfully with users. This process involves creativity and experimentation to refine prompts until desired outcomes are achieved.
 
 Prompt engineering is crucial because generative AI, while powerful, requires context and detailed instructions to generate accurate and relevant responses. By systematically designing prompts, we ensure that AI applications produce meaningful and usable content. Prompt engineering also provides greater developer control over AI interactions, improves user experience by delivering coherent and relevant responses, and increases flexibility by enabling reuse of prompts across different scenarios and domains.
 
 [Per Amazon Web Services]
+
+Here's a chunk from our SQL Bot's prompt as an example:
+
+system_prefix = """You are an agent designed to interact with a SQL database.
+Given an input question, create a syntactically correct {dialect} query to run, then look at the results of the query and return the answer.'''
+
+## MongoDB Atlas Bot 
+
+In line with what we've done so far, we will continue to use Streamlit for UI and hosting purposes along with LangChain and vector embeddings.
+
+If we can embed a list of examples and a user's question to peform dynamic few-shot prompting, it would only be rational to then ask "Why not embed our whole databse and perform FAISS with the user question?" And that's exactly what we are going to do. 
+
+We will host our course data from 'data/pathways_exports/courses.csv' as a MongoDB collection. Similar to how we had to initially connect to our SQL Server database, we will first need to establish a connection with our MongoDB cluster.
+
+
+
+
 
 
 
