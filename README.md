@@ -338,26 +338,18 @@ Now let's examine lines 187 to 208 of our code.
 
 ```
 def pipeline(query):
-    pipeline = [
-                {"$vectorSearch": {
+    pipeline = [{"$vectorSearch": {
                     "queryVector": get_text_embedding(query),
                     "path": "description_embedding",
                     "numCandidates": 219,
                     "limit": 5,
-                    "index": "vector_index",
-                }},
-        {
-            "$project": {
+                    "index": "vector_index",}},
+        {"$project": {
                 "_id": 0,
                 "name": 1,
                 "descriptionname": 1,
                 'score': {
-                    '$meta': 'vectorSearchScore'
-      }
-            
-            }
-        }
-            ]
+                    '$meta': 'vectorSearchScore' }}]
     return pipeline
 ```
 
