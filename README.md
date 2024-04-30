@@ -329,8 +329,7 @@ Vector search is a semantic search capability that utilizes machine learning mod
 
 Benefits of vector search include semantic understanding, scalability for large datasets, and flexibility to search different types of data. With MongoDB, vector search is efficient as vectors are stored together with the original data, ensuring consistency and simplicity in the application architecture. MongoDB Atlas supports scalable vector search, both horizontally and vertically, providing efficiency and reliability for demanding workloads.
 
-For information on how to set this up, follow https://www.mongodb.com/developer/products/atlas/semantic-search-mongodb-atlas-vector-search/?utm_campaign=devrel&utm_source=youtube&utm_medium=organic_social&utm_content=1ZIYVNvRVsY&utm_term=jesse.hall#what-is-vector-search-
-
+For information on how to set this up, follow: https://www.mongodb.com/developer/products/atlas/semantic-search-mongodb-atlas-vector-search/
 
 
 
