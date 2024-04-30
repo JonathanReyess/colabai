@@ -194,7 +194,7 @@ From here on outward, we will be using Streamlit to design our chatbot's user in
 
 For more information on Streamlit, visit https://streamlit.io 
 
-## SQL Server 
+### SQL Server 
 
 We will first need to set up our SQL database. For our use case, let's use Microsoft Azure's SQL Server. 
 
@@ -202,7 +202,7 @@ Once our server is up and running, we will need the following information from o
 
 ```
 server = "server-name.database.windows.net" # Your az SQL server name
-database = "database-name" SQL server DB name 
+database = "database-name" # SQL server DB name 
 username = "username" # SQL server username 
 password = "password" # SQL server password
 ```
@@ -236,7 +236,7 @@ llm = AzureChatOpenAI(
 toolkit = SQLDatabaseToolkit(db=db, llm=llm)
 ```
 
-## Few-Shot Prompting 
+### Few-Shot Prompting 
 
 Few-shot prompting is a technique that involves dynamically selecting and formatting examples based on input to provide context for a model. It's useful for chat models as it allows for adaptation to various conversational scenarios. We can tailor examples to suit our specific Q&A needs, ensuring the model's responses are relevant and accurate. 
 
@@ -262,7 +262,7 @@ This will give our chatbot an idea of what a question might look like, and what 
 
 Now here's where the magic happens. 
 
-## Vector Embeddings
+### Vector Embeddings
 
 Vector embeddings are numerical representations that capture the meaning and relationships of various data types, such as words, sentences, and more. They transform data into points in a multidimensional space, where similar points cluster together. These representations facilitate efficient data processing and enable tasks like sentiment analysis. 
 
@@ -284,7 +284,7 @@ example_selector = SemanticSimilarityExampleSelector.from_examples(
 
 We will then return the top 5 examples that are most similar to our question, and our model will do the rest depending on our instructions in "system_prefix".  
 
-## Prompt Engineering 
+### Prompt Engineering 
 
 Prompt engineering involves guiding generative AI to produce desired outputs by crafting detailed instructions in the form of prompts. These prompts are natural language texts that specify tasks for the AI to perform. In prompt engineering, we carefully design prompts, selecting appropriate formats, phrases, and symbols to guide the AI to interact meaningfully with users. This process involves creativity and experimentation to refine prompts until desired outcomes are achieved.
 
@@ -307,8 +307,29 @@ If we can embed a list of examples and a user's question to peform dynamic few-s
 
 We will host our course data from 'data/pathways_exports/courses.csv' as a MongoDB collection. Similar to how we had to initially connect to our SQL Server database, we will first need to establish a connection with our MongoDB cluster.
 
+We will store the following in our '.streamlit/secrets.toml' file. 
 
+```
+mdbpassword = "password"
+address = "address"
+uid = "user-id"
+```
 
+Once these are set, we can connect to our database. 
+
+```
+uri = "mongodb+srv://" + st.secrets["uid"] + ":" + st.secrets["mdbpassword"] + st.secrets["address"] + ".mongodb.net/?retryWrites=true&w=majority"
+
+mdbClient = MongoClient(uri, server_api=ServerApi('1'))
+```
+
+### Atlas Vector Search
+
+Vector search is a semantic search capability that utilizes machine learning models to transform various types of data, such as text, audio, or images, into high-dimensional vectors. These vectors capture the semantic meaning of the data, enabling searches based on similarities in the vector space rather than exact text matches. This technique complements traditional keyword-based search and enhances the capabilities of large language models (LLMs) by providing additional context. Vector search allows for finding relevant results even when exact wording is unknown, making it useful in natural language processing and recommendation systems.
+
+Benefits of vector search include semantic understanding, scalability for large datasets, and flexibility to search different types of data. With MongoDB, vector search is efficient as vectors are stored together with the original data, ensuring consistency and simplicity in the application architecture. MongoDB Atlas supports scalable vector search, both horizontally and vertically, providing efficiency and reliability for demanding workloads.
+
+For information on how to set this up, follow https://www.mongodb.com/developer/products/atlas/semantic-search-mongodb-atlas-vector-search/?utm_campaign=devrel&utm_source=youtube&utm_medium=organic_social&utm_content=1ZIYVNvRVsY&utm_term=jesse.hall#what-is-vector-search-
 
 
 
