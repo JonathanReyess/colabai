@@ -181,13 +181,123 @@ Please let me know if you need more information.
 > Finished chain.
 ```
 
-### MongoDB Atlas and Compass 
+## Azure SQL Server Bot (DEPRECATED)
 
-### Vector Embeddings
+Given the results of the test run above, it would only be rational to then try and create a conversational chatbot using a large-language model's SQL querying capabilities
+
 
 ### Streamlit 
 
-### Azure SQL Server Bot (DEPRECATED)
+Streamlit is a free and open-source Python-based framework to rapidly build and share machine learning and data science web apps. 
+
+From here on outward, we will be using Streamlit to design our chatbot's user interface and deploy it to the web.
+
+For more information on Streamlit, visit https://streamlit.io 
+
+## SQL Server 
+
+We will first need to set up our SQL database. For our use case, let's use Microsoft Azure's SQL Server. 
+
+Once our server is up and running, we will need the following information from our database connection string: 
+
+server = "server-name.database.windows.net" # Your az SQL server name
+database = "database-name" SQL server DB name 
+username = "username" # SQL server username 
+password = "password" # SQL server password
+
+We will store this information in a file called "secrets.toml" under our .streamlit folder. Inside this folder, you should also include 
+information such as your Azure OpenAI credentials. 
+
+
+In st_sql_bot.py, we will then connect to our database through SQL Alchemy and create our database enine with the following connection string: 
+
+odbc_str = (
+'mssql+pyodbc:///?odbc_connect='
+'Driver={ODBC Driver 17 for SQL Server}' +
+';Server=tcp:' + st.secrets["server"] + ';PORT=1433' +
+';DATABASE=' + st.secrets["database"] +
+';Uid=' + st.secrets["username"] +
+';Pwd=' + st.secrets["password"] +
+';Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;'
+)
+
+We will then use LangChain to connect our SQL Database to our GPT-3.5 model: 
+
+llm = AzureChatOpenAI(
+    openai_api_version="2023-05-15",
+    deployment_name="colab-copilot",
+    model_name="gpt-35-turbo",
+)
+toolkit = SQLDatabaseToolkit(db=db, llm=llm)
+
+## Few-Shot Prompting 
+
+Few-shot prompting is a technique that involves dynamically selecting and formatting examples based on input to provide context for a model. It's useful for chat models as it allows for adaptation to various conversational scenarios. We can tailor examples to suit our specific Q&A needs, ensuring the model's responses are relevant and accurate. 
+
+In our case, we will be using dynamic few-shot prompting, which further enhances this capability by allowing examples to be chosen based on semantic similarity to the input, improving the model's contextual understanding and response quality.
+
+We will first create a list of examples for our chatbot to reference: 
+
+examples = [
+
+    {
+        "input": "Give me some art classes", 
+        "query": "SELECT * FROM courses WHERE description LIKE '% Art %' OR name LIKE '% Art %';"
+     },
+
+    {
+        "input": "What's a course about making candles about?",
+        "query": "SELECT description FROM courses WHERE name LIKE '%candle%';",
+    },
+
+This will give our chatbot an idea of what a question might look like, and what we expect it to do. 
+
+Now here's where the magic happens. 
+
+## Vector Embeddings
+
+Vector embeddings are numerical representations that capture the meaning and relationships of various data types, such as words, sentences, and more. They transform data into points in a multidimensional space, where similar points cluster together. These representations facilitate efficient data processing and enable tasks like sentiment analysis. 
+
+OpenAI offers several embedding models (https://platform.openai.com/docs/guides/embeddings). In essence, such model will enable us to turn our words into numbers and map these numbers into a matrix where similar words are closer to eachother. 
+
+We will specifically embed the user's question along with all examples we have provided our model. Then, we will perform FAISS
+(Facebook AI Similarity Search - a library for efficient similarity search and clustering of dense vectors ) between the two.  
+
+example_selector = SemanticSimilarityExampleSelector.from_examples(
+    examples,
+    AzureOpenAIEmbeddings(azure_deployment="copilot-embedding",
+    openai_api_version="2023-05-15",),
+    FAISS,
+    k=5,
+    input_keys=["input"],
+)
+
+We will then return the top 5 examples that are most similar to our question, and our model will do the rest depending on our instructions in "system_prefix".  
+
+## Prompt Engineering 
+
+
+Prompt engineering involves guiding generative AI to produce desired outputs by crafting detailed instructions in the form of prompts. These prompts are natural language texts that specify tasks for the AI to perform. In prompt engineering, we carefully design prompts, selecting appropriate formats, phrases, and symbols to guide the AI to interact meaningfully with users. This process involves creativity and experimentation to refine prompts until desired outcomes are achieved.
+
+Prompt engineering is crucial because generative AI, while powerful, requires context and detailed instructions to generate accurate and relevant responses. By systematically designing prompts, we ensure that AI applications produce meaningful and usable content. Prompt engineering also provides greater developer control over AI interactions, improves user experience by delivering coherent and relevant responses, and increases flexibility by enabling reuse of prompts across different scenarios and domains.
+
+[Per Amazon Web Services]
+
+
+
+
+
+
+
+
+
+
+### MongoDB Atlas and Compass 
+
+
+
+
+
 ## How it was more tedious because of pymssql==2.2.7 and hard to integrate with LC, ODBC drivers (pyodbc==5.0.1).
 
 ### Azure OpenAI
