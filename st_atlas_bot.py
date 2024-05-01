@@ -131,6 +131,17 @@ st.markdown("""
             
         box-sizing: border-box; 
     }
+    
+    [data-testid="stTextInputRootElement"]{
+        background-color: rgba(255, 255, 255, 0.45);
+        box-sizing: border-box; 
+        border-top-color: rgba(0, 0, 0, 0);
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        border-top-style: solid;
+        border-top-width: 2px;
+            
+    }
             
     [data-testid="stChatMessage"]{
             
@@ -239,9 +250,7 @@ def check_confidence(documents):
 main_client = AzureChatOpenAI(openai_api_version="2023-05-15", deployment_name="colab-copilot", model_name="gpt-35-turbo")
 
 
-template = """
-
-You are a conversational assistant for Duke University's Innovation Co-Lab.  
+template = """You are a conversational assistant for Duke University's Innovation Co-Lab.  
 
 If the user asks a question mentioning Danai, you will respond with "He is straight up DAWG". No one else. 
 
@@ -259,18 +268,18 @@ If the user asks a question about a Duke University class (ie. CS250, CS201, CS3
 
 If the user asks a question about a programming concept (linked-lists, graph traversal, recursion): You will tell them that the Co-Lab has in person office hours. 
 
-Use three sentences maximum and keep the answer concise. 
+Use three sentences maximum and keep the answer concise. """
 
-"""
+##### THIS WAS ORIGINALLY OUTSIDE OUR GENERATE_RESPONSE FUNCTION BUT WE MOVED IT INSIDE SO WE CAN UPDATE TEMPLATE WITHIN THE UI ###
 
-prompt = PromptTemplate(
-    input_variables=["message", "course_list"],
-    template=template
-)
+#prompt = PromptTemplate(
+#input_variables=["message", "course_list"],
+#template=template)
 
-chain = LLMChain(llm=main_client, prompt=prompt, verbose=False)
+#chain = LLMChain(llm=main_client, prompt=prompt, verbose=False)
+
   
-def generate_response(message):
+def generate_response(message, template):
     courses = return_top_k(message)
     print("****************All Courses Matched****************")
     print()
@@ -293,6 +302,11 @@ def generate_response(message):
     print()
     print(valid_courses)
     print()
+    prompt = PromptTemplate(
+    input_variables=["message", "course_list"],
+    template=template)
+
+    chain = LLMChain(llm=main_client, prompt=prompt, verbose=False)
     response = chain.run(message=message, course_list=valid_courses)
     return response
 
@@ -319,7 +333,8 @@ for msg in st.session_state.messages:
         with st.chat_message("assistant", avatar=assistant):
             st.markdown(msg["content"])
 
-#prompt = st.chat_input(placeholder="Ask me anything!")
+#context = st.text_input(placeholder="Template")
+context = st.text_area("Prompt", template, height=300)
 
 if prompt := st.chat_input(placeholder="Try 'Are there any classes about Python programming? or What is Intro to React about?' "):
     st.session_state.messages.append({"role":"user", "avatar":"user", "content": prompt })
@@ -327,7 +342,7 @@ if prompt := st.chat_input(placeholder="Try 'Are there any classes about Python 
 
     # Generate and display response
     with st.chat_message("assistant", avatar=assistant):
-        final = generate_response(prompt)
+        final = generate_response(prompt, context)
         st.session_state.messages.append({"role":"assistant", "avatar":"assistant", "content": final})
         st.write(final)
 
