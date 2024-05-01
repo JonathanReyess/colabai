@@ -211,12 +211,12 @@ def return_top_k(query):
     documents = collection.aggregate(pipeline(query))
     return list(documents)
 
-print(return_top_k("I want to learn Java"))
-
-def check_most_confident(documents):
+#print(return_top_k("Recommend me a Python class"))
+## CURRENTLY ONLY BEING USED TO RETURN THE DESCRIPTION OF A CLASS ##
+def get_course_description(documents):
     valid_documents = []
     for document in documents:
-        if document['score'] > 0.73:
+        if document['score'] > 0.77:
             valid_documents.append(document)
     if not valid_documents:
         return None
@@ -225,10 +225,14 @@ def check_most_confident(documents):
 def check_confidence(documents):
     valid_documents = []
     for document in documents:
+        print(document)
+        print()
         if document['score'] > 0.65:
             valid_documents.append(document)
     names = [entry['name'] for entry in valid_documents]
-
+    #print()
+    #print("****************Names****************")
+    #print(names)
     return names
 
 
@@ -237,38 +241,30 @@ main_client = AzureChatOpenAI(openai_api_version="2023-05-15", deployment_name="
 
 template = """
 
-You are a conversational assistant for Duke University's Innovation Co-Lab.  \
+You are a conversational assistant for Duke University's Innovation Co-Lab.  
 
-If the user asks a question mentioning Danai, you will respond with "He is straight up DAWG". No one else. \
+If the user asks a question mentioning Danai, you will respond with "He is straight up DAWG". No one else. 
 
-If the user asks for a number of courses, you will return them that number of courses. \
+"Courses" and "Classes" are synonymous. 
 
-Otherwise, you will use the information below to recommend them a course to take. \
+Here is the question the user is asking: {message} 
 
-"Courses" and "Classes" are synonymous. \
+Use the courses offered below to recommend them a course to take: 
 
-Here is the question the user is asking: {message} \
-
-These are the most relevant courses: 
-
-Only return this course if it is not "none": {course_list} \
-
-Otherwise, return one of these courses: {all_courses} \
+{course_list} 
 
 You will follow ALL rules below:
 
-If the user asks a question about a class, but the list is empty, tell the user there are no courses relating to that topic. \
+If the user asks a question about a Duke University class (ie. CS250, CS201, CS330, CS350): You will tell them that the Co-Lab has in person office hours. 
 
-If the user asks a question about a Duke University class (ie. CS250, CS201, CS330, CS350): You will tell them that the Co-Lab has in person office hours. \
+If the user asks a question about a programming concept (linked-lists, graph traversal, recursion): You will tell them that the Co-Lab has in person office hours. 
 
-If the user asks a question about a programming concept (linked-lists, graph traversal, recursion): You will tell them that the Co-Lab has in person office hours. \
-
-Use three sentences maximum and keep the answer concise. \
+Use three sentences maximum and keep the answer concise. 
 
 """
 
 prompt = PromptTemplate(
-    input_variables=["message", "course_list", "all_courses"],
+    input_variables=["message", "course_list"],
     template=template
 )
 
@@ -276,18 +272,28 @@ chain = LLMChain(llm=main_client, prompt=prompt, verbose=False)
   
 def generate_response(message):
     courses = return_top_k(message)
-    valid_courses = check_confidence(courses)
-    most_valid_courses = check_most_confident(courses)
+    print("****************All Courses Matched****************")
     print()
-    print("****************This is the most valid course****************")
+    print(courses)
+    #valid_courses = check_confidence(courses)
+    print("****************Description of a Course****************")
     print()
-    print(most_valid_courses)
-    print()
-    print("****************These are valid courses****************")
+    most_valid_course = get_course_description(courses)
+    print(most_valid_course)
+    if most_valid_course != None:
+        valid_courses = most_valid_course
+    else:
+        valid_courses = check_confidence(courses)
+    #print()
+    #print("****************This is the most valid course****************")
+    #print()
+    #print(most_valid_course)
+    #print()
+    print("****************Courses Above Confidence Interval****************")
     print()
     print(valid_courses)
     print()
-    response = chain.run(message=message, course_list=most_valid_courses, all_courses=valid_courses)
+    response = chain.run(message=message, course_list=valid_courses)
     return response
 
 
